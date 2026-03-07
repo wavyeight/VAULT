@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Start Page</title>
+  <style>
+    :root {
+      --bg-1: #07111f;
+      --bg-2: #0b1630;
+      --bg-3: #101c3d;
+      --text: #eef4ff;
+      --muted: #a7b4d6;
+      --line: rgba(255,255,255,0.1);
+      --accent: #7fd3ff;
+      --accent-2: #9c7bff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      min-height: 100%;
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(127, 211, 255, 0.18), transparent 24%),
+        radial-gradient(circle at 80% 10%, rgba(156, 123, 255, 0.18), transparent 25%),
+        radial-gradient(circle at 50% 90%, rgba(88, 255, 191, 0.1), transparent 30%),
+        linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 38vw;
+      height: 38vw;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.26;
+      pointer-events: none;
+      animation: drift 18s ease-in-out infinite alternate;
+      z-index: 0;
+    }
+
+    body::before {
+      top: -12vw;
+      left: -10vw;
+      background: #4bc7ff;
+    }
+
+    body::after {
+      right: -10vw;
+      bottom: -14vw;
+      background: #7a57ff;
+      animation-duration: 24s;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(4vw, 2vw, 0) scale(1.08); }
+    }
+
+    #particles {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      padding: 28px;
+    }
+
+    .launcher {
+      width: min(1200px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .search-shell {
+      position: sticky;
+      top: 18px;
+      z-index: 3;
+      overflow: hidden;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 12px 38px rgba(0,0,0,0.22);
+      backdrop-filter: blur(18px) saturate(140%);
+      padding: 14px;
+    }
+
+    .search-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent 55%);
+      transform: translateX(-100%);
+      transition: transform 0.9s ease;
+      pointer-events: none;
+    }
+
+    .search-shell:hover::before {
+      transform: translateX(100%);
+    }
+
+    .search-form {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .search-engine-badge {
+      min-width: 120px;
+      height: 58px;
+      padding: 0 18px;
+      border-radius: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(127,211,255,0.14), rgba(156,123,255,0.16));
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .search-input-wrap {
+      position: relative;
+      flex: 1 1 420px;
+    }
+
+    .search-input-wrap svg {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.68);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 58px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      background: rgba(255,255,255,0.055);
+      color: var(--text);
+      padding: 0 18px 0 50px;
+      font-size: 1rem;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .search-input:focus {
+      border-color: rgba(127,211,255,0.45);
+      box-shadow: 0 0 0 5px rgba(127,211,255,0.1), 0 12px 28px rgba(70,130,255,0.14);
+      transform: translateY(-1px);
+    }
+
+    .search-button {
+      height: 58px;
+      padding: 0 22px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(127,211,255,0.22), rgba(156,123,255,0.24));
+      color: var(--text);
+      font-weight: 700;
+      font-size: 0.98rem;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 12px 28px rgba(70,130,255,0.14);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .search-button:hover {
+      transform: translateY(-2px);
+      border-color: rgba(127,211,255,0.28);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 16px 30px rgba(70,130,255,0.2);
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      width: 100%;
+      align-items: start;
+    }
+
+    .link-card {
+      position: relative;
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+      border: 1px solid rgba(255,255,255,0.08);
+      min-height: 154px;
+      padding: 18px;
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.25s ease, background 0.25s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 8px 24px rgba(0,0,0,0.18);
+      backdrop-filter: blur(10px);
+    }
+
+    .link-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -40% auto;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(127,211,255,0.22), transparent 70%);
+      pointer-events: none;
+      transition: transform 0.25s ease;
+      opacity: 0.85;
+    }
+
+    .link-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      border-color: rgba(127,211,255,0.26);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.26), 0 0 0 1px rgba(127,211,255,0.08) inset;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+    }
+
+    .link-card:hover::after {
+      transform: scale(1.18);
+    }
+
+    .link-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .icon-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      font-size: 18px;
+    }
+
+    .pill {
+      font-size: 0.74rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #dce7ff;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .link-card h4 {
+      margin: 16px 0 8px;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+
+    .link-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 0.95rem;
+      max-width: 95%;
+    }
+
+    .stats-shell {
+      position: relative;
+      overflow: hidden;
+      border-radius: 26px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 12px 38px rgba(0,0,0,0.22);
+      backdrop-filter: blur(18px) saturate(140%);
+      padding: 20px;
+    }
+
+    .stats-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent 55%);
+      transform: translateX(-100%);
+      transition: transform 0.9s ease;
+      pointer-events: none;
+    }
+
+    .stats-shell:hover::before {
+      transform: translateX(100%);
+    }
+
+    .stats-header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .stats-title-wrap h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .stats-title-wrap p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .stats-actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stats-link {
+      text-decoration: none;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .stats-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(127,211,255,0.28);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.2);
+    }
+
+    .stats-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.05fr 1.35fr;
+      gap: 18px;
+    }
+
+    .stats-card,
+    .skills-card {
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.16);
+      padding: 18px;
+      min-height: 220px;
+    }
+
+    .stats-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .stat-chip {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .stat-chip-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .stat-chip-value {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      word-break: break-word;
+    }
+
+    .stats-status {
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .stats-status strong {
+      color: var(--text);
+    }
+
+    .skills-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .skills-header h4,
+    .stats-card h4 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .skills-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .skill-row {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .skill-name,
+    .skill-level,
+    .skill-xp {
+      font-size: 0.92rem;
+    }
+
+    .skill-name {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .skill-level,
+    .skill-xp {
+      color: var(--muted);
+    }
+
+    .skill-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 18px rgba(127,211,255,0.25);
+    }
+
+    .stats-footnote {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .stats-footnote code {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      padding: 2px 6px;
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 1050px) {
+      .links-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .vault-title h1 {
+      font-size: 2.6rem;
+      letter-spacing: 0.15em;
+      margin: 10px 0 6px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 25px rgba(127,211,255,0.25);
+    }
+
+    .vault-title {
+      margin-bottom: 4px;
+      user-select: none;
+    }
+
+    @media (max-width: 720px) {
+      .app {
+        padding: 16px;
+      }
+
+      .launcher {
+        gap: 16px;
+      }
+
+      .search-form {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search-engine-badge,
+      .search-button {
+        width: 100%;
+      }
+
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .search-shell {
+        position: relative;
+        top: 0;
+      }
+
+      .stats-meta {
+        grid-template-columns: 1fr;
+      }
+
+      .skill-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <main class="app">
+    <div class="launcher">
+      <header class="vault-title">
+        <h1>TONY'S VAULT</h1>
+      </header>
+      <section class="search-shell">
+        <form class="search-form" action="https://duckduckgo.com/" method="get" target="_blank" rel="noreferrer">
+          <div class="search-engine-badge">DuckDuckGo</div>
+          <div class="search-input-wrap">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M21 21L16.65 16.65M18 11C18 14.866 14.866 18 11 18C7.13401 18 4 14.866 4 11C4 7.13401 7.13401 4 11 4C14.866 4 18 7.13401 18 11Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <input class="search-input" type="text" name="q" placeholder="Search the web..." autocomplete="off" />
+          </div>
+          <button class="search-button" type="submit">Search</button>
+        </form>
+      </section>
+
+      <div class="links-grid" id="linksGrid">
+        <a class="link-card" href="https://www.youtube.com/" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">▶️</div>
+            <div class="pill">Media</div>
+          </div>
+          <h4>YouTube</h4>
+          <p>Videos, music, and streams.</p>
+        </a>
+
+        <a class="link-card" href="https://fmhy.net/" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">🌐</div>
+            <div class="pill">Web</div>
+          </div>
+          <h4>FMHY</h4>
+          <p>Large web resource index.</p>
+        </a>
+
+        <a class="link-card" href="https://runescape.wiki/w/Ores" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">⛏️</div>
+            <div class="pill">RS Wiki</div>
+          </div>
+          <h4>Ores</h4>
+          <p>Ore tables, mining resources, and smithing materials.</p>
+        </a>
+
+        <a class="link-card" href="https://runescape.wiki/w/Bars" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">🔥</div>
+            <div class="pill">RS Wiki</div>
+          </div>
+          <h4>Bars</h4>
+          <p>Smelting and bar information for smithing.</p>
+        </a>
+
+        <a class="link-card" href="https://runescape.wiki/w/Money_making_guide" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">💰</div>
+            <div class="pill">Guide</div>
+          </div>
+          <h4>Money Making Guide</h4>
+          <p>Profit methods and money making ideas.</p>
+        </a>
+
+        <a class="link-card" href="https://runescape.wiki/w/Revolution/Bars" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">⚔️</div>
+            <div class="pill">Combat</div>
+          </div>
+          <h4>Revolution Bars</h4>
+          <p>Combat ability bar setups.</p>
+        </a>
+
+        <a class="link-card" href="https://runescape.wiki/w/Armour" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">🛡️</div>
+            <div class="pill">Gear</div>
+          </div>
+          <h4>Armour</h4>
+          <p>Armour reference and equipment upgrades.</p>
+        </a>
+
+        <a class="link-card" href="https://runescape.wiki/w/Weapons" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">🗡️</div>
+            <div class="pill">Gear</div>
+          </div>
+          <h4>Weapons</h4>
+          <p>Weapon tables and combat gear.</p>
+        </a>
+
+        <a class="link-card" href="https://runescape.wiki/w/List_of_quests" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">📜</div>
+            <div class="pill">Questing</div>
+          </div>
+          <h4>List of Quests</h4>
+          <p>Quest hub and requirements.</p>
+        </a>
+
+        <a class="link-card" href="https://chatgpt.com/" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">🧠</div>
+            <div class="pill">AI</div>
+          </div>
+          <h4>ChatGPT</h4>
+          <p>Your AI workspace.</p>
+        </a>
+
+        <a class="link-card" href="https://v1.y2mate.nu/" target="_blank" rel="noreferrer">
+          <div class="link-top">
+            <div class="icon-badge">⬇️</div>
+            <div class="pill">Utility</div>
+          </div>
+          <h4>Y2Mate</h4>
+          <p>Media download utility.</p>
+        </a>
+      </div>
+
+      <section class="stats-shell" id="playerStatsSection">
+        <div class="stats-header">
+          <div class="stats-title-wrap">
+            <h3>Ashina Vera · RS3 Stats</h3>
+            <p>Live player data pulled in from RuneScape sources, with fallback handling for local start-page use.</p>
+          </div>
+          <div class="stats-actions">
+            <a class="stats-link" href="https://runepixels.com/players/ashina-vera/skills" target="_blank" rel="noreferrer">Open RunePixels</a>
+            <a class="stats-link" href="https://apps.runescape.com/runemetrics/app/search" target="_blank" rel="noreferrer">Open RuneMetrics</a>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stats-card">
+            <h4>Account snapshot</h4>
+            <p class="stats-status" id="statsStatus"><strong>Loading…</strong> Fetching hiscores and profile data for Ashina Vera.</p>
+            <div class="stats-meta" id="statsMeta">
+              <div class="stat-chip">
+                <div class="stat-chip-label">Overall Level</div>
+                <div class="stat-chip-value" id="overallLevel">—</div>
+              </div>
+              <div class="stat-chip">
+                <div class="stat-chip-label">Overall XP</div>
+                <div class="stat-chip-value" id="overallXp">—</div>
+              </div>
+              <div class="stat-chip">
+                <div class="stat-chip-label">Overall Rank</div>
+                <div class="stat-chip-value" id="overallRank">—</div>
+              </div>
+              <div class="stat-chip">
+                <div class="stat-chip-label">Combat Level</div>
+                <div class="stat-chip-value" id="combatLevel">—</div>
+              </div>
+              <div class="stat-chip">
+                <div class="stat-chip-label">Quests Complete</div>
+                <div class="stat-chip-value" id="questCount">—</div>
+              </div>
+              <div class="stat-chip">
+                <div class="stat-chip-label">Activities Loaded</div>
+                <div class="stat-chip-value" id="activityCount">—</div>
+              </div>
+            </div>
+            <p class="stats-footnote" id="statsFootnote">If this page is opened as a <code>file://</code> page, most browsers block live API fetches. Serve it over <code>http://localhost</code> for live stats.</p>
+            <div class="stats-actions" id="localServerHelp" style="margin-top:12px; display:none;">
+              <button class="search-button" id="copyServerCmd" type="button">Copy local server command</button>
+              <a class="stats-link" href="https://runepixels.com/players/ashina-vera/skills" target="_blank" rel="noreferrer">Open RunePixels page</a>
+            </div>
+          </article>
+
+          <article class="skills-card">
+            <div class="skills-header">
+              <h4>Top skills</h4>
+              <div class="pill">Live lookup</div>
+            </div>
+            <div class="skills-list" id="skillsList">
+              <p class="stats-status">Waiting for skill data…</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    const PLAYER_NAME = 'Ashina Vera';
+    const PLAYER_SLUG = 'ashina-vera';
+    const RS3_SKILLS = [
+      'Overall', 'Attack', 'Defence', 'Strength', 'Constitution', 'Ranged', 'Prayer', 'Magic',
+      'Cooking', 'Woodcutting', 'Fletching', 'Fishing', 'Firemaking', 'Crafting', 'Smithing',
+      'Mining', 'Herblore', 'Agility', 'Thieving', 'Slayer', 'Farming', 'Runecrafting', 'Hunter',
+      'Construction', 'Summoning', 'Dungeoneering', 'Divination', 'Invention', 'Archaeology', 'Necromancy'
+    ];
+
+    const isFileProtocol = window.location.protocol === 'file:';
+
+    const endpoints = {
+      hiscore: `https://secure.runescape.com/m=hiscore/index_lite.ws?player=${encodeURIComponent(PLAYER_NAME)}`,
+      profile: `https://apps.runescape.com/runemetrics/profile/profile?user=${encodeURIComponent(PLAYER_NAME)}&activities=20`,
+      quests: `https://apps.runescape.com/runemetrics/quests?user=${encodeURIComponent(PLAYER_NAME)}`,
+      runePixels: `https://runepixels.com/players/${PLAYER_SLUG}/skills`
+    };
+
+    function resize() {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width = window.innerWidth + 'px';
+      canvas.style.height = window.innerHeight + 'px';
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      createParticles();
+    }
+
+    function createParticles() {
+      const count = 70;
+      particles = Array.from({ length: count }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: Math.random() * 2 + 0.5,
+        a: Math.random() * 0.6 + 0.15
+      }));
+    }
+
+    function step() {
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
+        if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
+        ctx.beginPath();
+        ctx.fillStyle = `rgba(180,222,255,${p.a})`;
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      requestAnimationFrame(step);
+    }
+
+    function formatNumber(value) {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return '—';
+      return new Intl.NumberFormat().format(num);
+    }
+
+    function formatCompact(value) {
+      const num = Number(value);
+      if (!Number.isFinite(num)) return '—';
+      return new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(num);
+    }
+
+    function calculateCombat(skills) {
+      const getLevel = (name) => Number(skills[name]?.level || 1);
+      const attack = getLevel('Attack');
+      const strength = getLevel('Strength');
+      const defence = getLevel('Defence');
+      const constitution = getLevel('Constitution');
+      const magic = getLevel('Magic');
+      const ranged = getLevel('Ranged');
+      const prayer = getLevel('Prayer');
+      const summoning = getLevel('Summoning');
+      const necromancy = getLevel('Necromancy');
+
+      const melee = attack + strength;
+      const ranger = ranged * 2;
+      const mage = magic * 2;
+      const necro = necromancy * 2;
+      const dominant = Math.max(melee, ranger, mage, necro);
+      const base = 0.25 * (defence + constitution + Math.floor(prayer / 2) + Math.floor(summoning / 2));
+      return Math.floor(base + 0.325 * dominant);
+    }
+
+    async function fetchWithFallback(url, parser = 'text') {
+      const variants = [
+        url,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        `https://corsproxy.io/?${encodeURIComponent(url)}`
+      ];
+
+      let lastError = null;
+
+      for (const candidate of variants) {
+        try {
+          const response = await fetch(candidate, {
+            headers: {
+              Accept: parser === 'json' ? 'application/json,text/plain,*/*' : 'text/plain,*/*'
+            }
+          });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return parser === 'json' ? await response.json() : await response.text();
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error('Failed to fetch remote data');
+    }
+
+    function parseHiscoreCsv(csvText) {
+      const safeText = String(csvText || '').trim();
+      if (!safeText) return {};
+
+      const lines = safeText.split(/\r?\n/).filter(Boolean);
+      const mapped = {};
+
+      RS3_SKILLS.forEach((skillName, index) => {
+        const row = (lines[index] || '').split(',');
+        mapped[skillName] = {
+          name: skillName,
+          rank: Number(row[0] ?? -1),
+          level: Number(row[1] ?? 0),
+          xp: Number(row[2] ?? 0)
+        };
+      });
+
+      return mapped;
+    }
+
+    function renderSkills(skills) {
+      const skillsList = document.getElementById('skillsList');
+      const visibleSkills = Object.values(skills)
+        .filter((skill) => skill && skill.name !== 'Overall')
+        .sort((a, b) => b.level - a.level || b.xp - a.xp)
+        .slice(0, 8);
+
+      if (!visibleSkills.length) {
+        skillsList.innerHTML = '<p class="stats-status">No skill data available.</p>';
+        return;
+      }
+
+      skillsList.innerHTML = visibleSkills.map((skill) => {
+        const width = Math.max(3, Math.min(100, (Number(skill.level || 0) / 120) * 100));
+        return `
+          <div class="skill-row">
+            <div>
+              <div class="skill-name">${skill.name}</div>
+              <div class="skill-level">Level ${formatNumber(skill.level)}</div>
+            </div>
+            <div class="skill-bar" aria-hidden="true">
+              <div class="skill-bar-fill" style="width:${width}%"></div>
+            </div>
+            <div class="skill-xp">${formatCompact(skill.xp)} XP</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setText(id, value) {
+      const node = document.getElementById(id);
+      if (node) node.textContent = value;
+    }
+
+    async function copyServerCommand() {
+      const command = 'py -m http.server 5500';
+      try {
+        await navigator.clipboard.writeText(command);
+        setText('copyServerCmd', 'Copied: py -m http.server 5500');
+      } catch (error) {
+        setText('copyServerCmd', 'Run: py -m http.server 5500');
+      }
+    }
+
+    async function loadPlayerStats() {
+      const statusEl = document.getElementById('statsStatus');
+      const footnoteEl = document.getElementById('statsFootnote');
+      const localServerHelp = document.getElementById('localServerHelp');
+
+      if (isFileProtocol) {
+        localServerHelp.style.display = 'flex';
+        statusEl.innerHTML = '<strong>Live stats are blocked from a local file.</strong> Open this page through <code>http://localhost</code> and the stats section will work.';
+        footnoteEl.innerHTML = 'Quick fix on Windows: open Command Prompt in this folder, run <code>py -m http.server 5500</code>, then open <code>http://localhost:5500/</code>.';
+        setText('overallLevel', 'Needs localhost');
+        setText('overallXp', 'Needs localhost');
+        setText('overallRank', 'Needs localhost');
+        setText('combatLevel', 'Needs localhost');
+        setText('questCount', 'Needs localhost');
+        setText('activityCount', 'Needs localhost');
+        document.getElementById('skillsList').innerHTML = '<p class="stats-status">Live skill data is disabled on <code>file://</code> pages by browser security rules.</p>';
+        return;
+      }
+
+      try {
+        const [hiscoreText, profileData, questsData] = await Promise.allSettled([
+          fetchWithFallback(endpoints.hiscore, 'text'),
+          fetchWithFallback(endpoints.profile, 'json'),
+          fetchWithFallback(endpoints.quests, 'json')
+        ]);
+
+        if (hiscoreText.status !== 'fulfilled') {
+          throw hiscoreText.reason || new Error('Hiscore request failed');
+        }
+
+        const skills = parseHiscoreCsv(hiscoreText.value);
+        const overall = skills.Overall || { level: 0, xp: 0, rank: -1 };
+        const combatLevel = calculateCombat(skills);
+
+        setText('overallLevel', formatNumber(overall.level));
+        setText('overallXp', formatNumber(overall.xp));
+        setText('overallRank', overall.rank > 0 ? formatNumber(overall.rank) : 'Unranked');
+        setText('combatLevel', formatNumber(combatLevel));
+
+        if (profileData.status === 'fulfilled') {
+          const profile = profileData.value || {};
+          const activities = Array.isArray(profile.activities) ? profile.activities.length : 0;
+          setText('activityCount', formatNumber(activities));
+        } else {
+          setText('activityCount', 'Unavailable');
+        }
+
+        if (questsData.status === 'fulfilled') {
+          const questsPayload = questsData.value;
+          const quests = Array.isArray(questsPayload?.quests)
+            ? questsPayload.quests
+            : Array.isArray(questsPayload)
+              ? questsPayload
+              : [];
+          const completeCount = quests.filter((quest) => {
+            const status = String(quest.status ?? quest.questStatus ?? '').toLowerCase();
+            return status.includes('complete') || status === 'completed';
+          }).length;
+          setText('questCount', completeCount ? formatNumber(completeCount) : (quests.length ? '0' : 'Unavailable'));
+        } else {
+          setText('questCount', 'Unavailable');
+        }
+
+        renderSkills(skills);
+        statusEl.innerHTML = `<strong>Live data loaded.</strong> Showing official RS3 hiscores for ${PLAYER_NAME}${profileData.status === 'fulfilled' ? ' plus RuneMetrics activity data' : ''}.`;
+        footnoteEl.textContent = profileData.status === 'fulfilled' || questsData.status === 'fulfilled'
+          ? 'Stats loaded. If some RuneMetrics fields are missing, that part of the profile may be private or blocked.'
+          : 'Hiscores loaded successfully. RuneMetrics profile or quest data was not available, so those fields were left unavailable.';
+      } catch (error) {
+        statusEl.innerHTML = `<strong>Could not load live stats automatically.</strong> Open RunePixels for Ashina Vera, or refresh again later.`;
+        footnoteEl.textContent = 'The page tried direct requests first and then proxy fallbacks. Remote APIs may still block some browser requests from a local file.';
+        setText('overallLevel', 'Unavailable');
+        setText('overallXp', 'Unavailable');
+        setText('overallRank', 'Unavailable');
+        setText('combatLevel', 'Unavailable');
+        setText('questCount', 'Unavailable');
+        setText('activityCount', 'Unavailable');
+        document.getElementById('skillsList').innerHTML = '<p class="stats-status">Live skill data could not be loaded right now.</p>';
+      }
+    }
+
+    function runSelfTests() {
+      console.assert(Array.isArray(RS3_SKILLS) && RS3_SKILLS.length >= 30, 'RS3 skills list should be present');
+      console.assert(typeof calculateCombat === 'function', 'Combat calculator should exist');
+      console.assert(typeof parseHiscoreCsv === 'function', 'Hiscore parser should exist');
+      console.assert(document.getElementById('playerStatsSection'), 'Stats section should exist');
+      console.assert(document.getElementById('skillsList'), 'Skills list container should exist');
+      console.assert(typeof isFileProtocol === 'boolean', 'Protocol detection should exist');
+
+      const fakeCsv = '1,2898,500000000\r\n2,99,13034431\n3,99,13034431';
+      const parsed = parseHiscoreCsv(fakeCsv);
+      console.assert(parsed.Overall.level === 2898, 'Parser should read Windows/Unix line breaks correctly');
+      console.assert(parsed.Attack.level === 99, 'Parser should map Attack row correctly');
+
+      const fakeSkills = {
+        Attack: { level: 99 }, Strength: { level: 99 }, Defence: { level: 99 }, Constitution: { level: 99 },
+        Magic: { level: 99 }, Ranged: { level: 99 }, Prayer: { level: 99 }, Summoning: { level: 99 }, Necromancy: { level: 99 }
+      };
+      console.assert(Number.isFinite(calculateCombat(fakeSkills)), 'Combat level calculation should return a number');
+    }
+
+    document.getElementById('copyServerCmd')?.addEventListener('click', copyServerCommand);
+
+    window.addEventListener('resize', resize);
+    resize();
+    step();
+    runSelfTests();
+    loadPlayerStats();
+  </script>
+</body>
+</html>
