@@ -3,35 +3,104 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Start Page</title>
+  <title>TONY'S VAULT</title>
   <style>
     :root {
       --bg-1: #07111f;
       --bg-2: #0b1630;
       --bg-3: #101c3d;
+      --panel: rgba(255,255,255,0.07);
+      --panel-2: rgba(255,255,255,0.04);
       --text: #eef4ff;
       --muted: #a7b4d6;
-      --line: rgba(255,255,255,0.1);
+      --line: rgba(255,255,255,0.11);
       --accent: #7fd3ff;
       --accent-2: #9c7bff;
+      --accent-3: #5df0c7;
+      --danger: #ff8b9f;
+      --warning: #ffd57c;
+      --success: #79f0b0;
+      --shadow: 0 20px 50px rgba(0,0,0,0.28);
+      --blur: 18px;
+      --glow: 0.22;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --card-gap: 18px;
+      --dock-width: 78px;
+      --max-width: 1380px;
     }
 
-    * {
-      box-sizing: border-box;
+    :root[data-theme="neon-gold"] {
+      --bg-1: #120d04;
+      --bg-2: #1e1608;
+      --bg-3: #2c1f09;
+      --panel: rgba(255, 234, 184, 0.08);
+      --panel-2: rgba(255, 245, 216, 0.05);
+      --text: #fff6de;
+      --muted: #d6c8a2;
+      --line: rgba(255, 222, 156, 0.16);
+      --accent: #ffcb5c;
+      --accent-2: #ff9d38;
+      --accent-3: #fff4af;
     }
 
+    :root[data-theme="rs3-dark"] {
+      --bg-1: #06080c;
+      --bg-2: #10161c;
+      --bg-3: #161f27;
+      --panel: rgba(220, 230, 246, 0.07);
+      --panel-2: rgba(220, 230, 246, 0.04);
+      --text: #eef6ff;
+      --muted: #aab7c8;
+      --line: rgba(180, 201, 225, 0.12);
+      --accent: #7ab9ff;
+      --accent-2: #6de5ff;
+      --accent-3: #a2f0d8;
+    }
+
+    :root[data-theme="cyber-purple"] {
+      --bg-1: #0f081a;
+      --bg-2: #170d28;
+      --bg-3: #211140;
+      --panel: rgba(231, 214, 255, 0.07);
+      --panel-2: rgba(231, 214, 255, 0.04);
+      --text: #f5edff;
+      --muted: #beafd8;
+      --line: rgba(192, 164, 255, 0.13);
+      --accent: #bb8dff;
+      --accent-2: #7fd3ff;
+      --accent-3: #ff79db;
+    }
+
+    :root[data-theme="glass-white"] {
+      --bg-1: #96a7c2;
+      --bg-2: #7e9cbc;
+      --bg-3: #8893b2;
+      --panel: rgba(255,255,255,0.18);
+      --panel-2: rgba(255,255,255,0.12);
+      --text: #132238;
+      --muted: #314562;
+      --line: rgba(19,34,56,0.12);
+      --accent: #2b7fff;
+      --accent-2: #875fff;
+      --accent-3: #10b7a6;
+      --shadow: 0 20px 50px rgba(16, 23, 38, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     html, body {
       min-height: 100%;
       margin: 0;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at 20% 20%, rgba(127, 211, 255, 0.18), transparent 24%),
-        radial-gradient(circle at 80% 10%, rgba(156, 123, 255, 0.18), transparent 25%),
-        radial-gradient(circle at 50% 90%, rgba(88, 255, 191, 0.1), transparent 30%),
+        radial-gradient(circle at 16% 18%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 22%),
+        radial-gradient(circle at 86% 12%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 26%),
+        radial-gradient(circle at 48% 90%, color-mix(in srgb, var(--accent-3) 12%, transparent), transparent 30%),
         linear-gradient(135deg, var(--bg-1), var(--bg-2), var(--bg-3));
       overflow-x: hidden;
-      overflow-y: auto;
     }
 
     body::before,
@@ -41,111 +110,346 @@
       width: 38vw;
       height: 38vw;
       border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.26;
+      filter: blur(72px);
+      opacity: calc(var(--glow) + 0.03);
       pointer-events: none;
       animation: drift 18s ease-in-out infinite alternate;
       z-index: 0;
     }
-
-    body::before {
-      top: -12vw;
-      left: -10vw;
-      background: #4bc7ff;
-    }
-
-    body::after {
-      right: -10vw;
-      bottom: -14vw;
-      background: #7a57ff;
-      animation-duration: 24s;
-    }
+    body::before { top: -12vw; left: -10vw; background: var(--accent); }
+    body::after { right: -10vw; bottom: -14vw; background: var(--accent-2); animation-duration: 26s; }
 
     @keyframes drift {
       from { transform: translate3d(0, 0, 0) scale(1); }
       to { transform: translate3d(4vw, 2vw, 0) scale(1.08); }
     }
 
-    #particles {
+    #particles, #starfield, #gridOverlay {
       position: fixed;
       inset: 0;
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.8;
       pointer-events: none;
     }
+    #particles { opacity: 0.72; }
+    #starfield { opacity: 0.38; }
+    #gridOverlay {
+      opacity: 0.16;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 38px 38px;
+      mask-image: radial-gradient(circle at center, black 34%, transparent 78%);
+    }
 
-    .app {
+    .scan-line {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.08;
+      background: repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,0.16) 0px,
+        rgba(255,255,255,0.16) 1px,
+        transparent 2px,
+        transparent 8px
+      );
+      mix-blend-mode: soft-light;
+    }
+
+    .app-shell {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
-      padding: 28px;
+      padding-left: calc(var(--dock-width) + 18px);
     }
 
-    .launcher {
-      width: min(1200px, 100%);
-      margin: 0 auto;
-      display: grid;
-      gap: 20px;
-      text-align: center;
-    }
-
-    .search-shell {
-      position: sticky;
+    .dock {
+      position: fixed;
+      left: 18px;
       top: 18px;
-      z-index: 3;
-      overflow: hidden;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+      bottom: 18px;
+      width: var(--dock-width);
       border: 1px solid var(--line);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 12px 38px rgba(0,0,0,0.22);
-      backdrop-filter: blur(18px) saturate(140%);
-      padding: 14px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      backdrop-filter: blur(var(--blur)) saturate(150%);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), var(--shadow);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 10px;
+      gap: 12px;
     }
 
-    .search-shell::before {
+    .dock-logo {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 26%, transparent), color-mix(in srgb, var(--accent-2) 28%, transparent));
+      border: 1px solid var(--line);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      user-select: none;
+    }
+
+    .dock-nav {
+      display: grid;
+      gap: 10px;
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    .dock-btn {
+      width: 100%;
+      height: 52px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+      text-decoration: none;
+      position: relative;
+    }
+    .dock-btn:hover, .dock-btn.active {
+      transform: translateY(-2px);
+      border-color: var(--line);
+      background: rgba(255,255,255,0.06);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    }
+    .dock-btn .hint {
+      position: absolute;
+      left: calc(100% + 14px);
+      white-space: nowrap;
+      background: rgba(8,12,20,0.92);
+      color: white;
+      padding: 8px 10px;
+      border-radius: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(4px);
+      transition: .18s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+      font-size: 0.82rem;
+    }
+    .dock-btn:hover .hint { opacity: 1; transform: translateY(0); }
+
+    .dock-bottom {
+      margin-top: auto;
+      display: grid;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 20px 24px 28px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .glass {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), var(--shadow);
+      backdrop-filter: blur(var(--blur)) saturate(150%);
+    }
+    .glass::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent 55%);
-      transform: translateX(-100%);
-      transition: transform 0.9s ease;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent 54%);
+      transform: translateX(-110%);
+      transition: transform .9s ease;
       pointer-events: none;
     }
+    .glass:hover::before { transform: translateX(110%); }
 
-    .search-shell:hover::before {
-      transform: translateX(100%);
+    .section {
+      padding: 18px;
+      scroll-margin-top: 18px;
     }
 
-    .search-form {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .search-engine-badge {
-      min-width: 120px;
-      height: 58px;
-      padding: 0 18px;
-      border-radius: 18px;
+    .section-tag {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, rgba(127,211,255,0.14), rgba(156,123,255,0.16));
-      border: 1px solid rgba(255,255,255,0.08);
+      gap: 8px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
       color: var(--text);
-      font-weight: 700;
-      letter-spacing: 0.02em;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
-    .search-input-wrap {
-      position: relative;
-      flex: 1 1 420px;
+    .hero {
+      min-height: 270px;
+      display: grid;
+      grid-template-columns: 1.4fr 0.95fr;
+      gap: 18px;
+      padding: 22px;
+      align-items: stretch;
     }
 
+    .hero-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 14px;
+    }
+    .hero-title {
+      margin: 0;
+      font-size: clamp(2.3rem, 4.2vw, 4.6rem);
+      line-height: .95;
+      letter-spacing: .18em;
+      font-weight: 900;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--accent-3));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 28px color-mix(in srgb, var(--accent) 24%, transparent);
+      user-select: none;
+    }
+    .hero-subtitle {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--muted);
+      max-width: 760px;
+      line-height: 1.65;
+    }
+
+    .hero-inline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .pulse-chip, .metric-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-3);
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-3) 55%, transparent);
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-3) 60%, transparent); }
+      75% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--accent-3) 0%, transparent); }
+      100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-3) 0%, transparent); }
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      border-radius: 20px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+      min-height: 118px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .mini-label {
+      color: var(--muted);
+      text-transform: uppercase;
+      font-size: .74rem;
+      letter-spacing: .11em;
+      margin-bottom: 10px;
+    }
+    .mini-value {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+    }
+    .mini-sub {
+      color: var(--muted);
+      font-size: .92rem;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    .search-shell {
+      padding: 16px;
+      position: sticky;
+      top: 18px;
+      z-index: 4;
+    }
+    .search-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .search-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tab-btn, .ghost-btn, .primary-btn, .icon-btn, .tiny-btn, select, input, textarea {
+      font: inherit;
+    }
+    .tab-btn {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 22%, transparent), color-mix(in srgb, var(--accent-2) 18%, transparent));
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+      transform: translateY(-1px);
+    }
+
+    .search-form {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 12px;
+    }
+    .search-input-wrap {
+      position: relative;
+    }
     .search-input-wrap svg {
       position: absolute;
       left: 18px;
@@ -154,109 +458,160 @@
       color: rgba(255,255,255,0.68);
       pointer-events: none;
     }
-
-    .search-input {
+    .input, .textarea, .selectish {
       width: 100%;
-      height: 58px;
-      border: 1px solid rgba(255,255,255,0.1);
+      min-height: 56px;
+      padding: 0 16px 0 48px;
       border-radius: 18px;
+      border: 1px solid var(--line);
       background: rgba(255,255,255,0.055);
       color: var(--text);
-      padding: 0 18px 0 50px;
-      font-size: 1rem;
       outline: none;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
     }
-
-    .search-input::placeholder {
-      color: rgba(255,255,255,0.5);
-    }
-
-    .search-input:focus {
-      border-color: rgba(127,211,255,0.45);
-      box-shadow: 0 0 0 5px rgba(127,211,255,0.1), 0 12px 28px rgba(70,130,255,0.14);
+    .input:focus, .textarea:focus, select:focus {
+      border-color: color-mix(in srgb, var(--accent) 52%, var(--line));
+      box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 14%, transparent), 0 14px 28px rgba(0,0,0,0.18);
       transform: translateY(-1px);
     }
-
-    .search-button {
-      height: 58px;
-      padding: 0 22px;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(127,211,255,0.22), rgba(156,123,255,0.24));
-      color: var(--text);
-      font-weight: 700;
-      font-size: 0.98rem;
-      cursor: pointer;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 12px 28px rgba(70,130,255,0.14);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    .input::placeholder, .textarea::placeholder { color: color-mix(in srgb, var(--muted) 80%, transparent); }
+    .textarea {
+      padding: 14px 16px;
+      min-height: 110px;
+      resize: vertical;
     }
 
-    .search-button:hover {
+    .primary-btn, .ghost-btn, .icon-btn, .tiny-btn {
+      border: 1px solid var(--line);
+      color: var(--text);
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .primary-btn {
+      min-height: 56px;
+      padding: 0 18px;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 22%, transparent), color-mix(in srgb, var(--accent-2) 22%, transparent));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 14px 28px rgba(0,0,0,0.16);
+      font-weight: 700;
+    }
+    .ghost-btn {
+      min-height: 56px;
+      padding: 0 16px;
+      background: rgba(255,255,255,0.05);
+    }
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.05);
+      display: grid;
+      place-items: center;
+    }
+    .tiny-btn {
+      min-height: 36px;
+      padding: 0 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+    }
+    .primary-btn:hover, .ghost-btn:hover, .icon-btn:hover, .tiny-btn:hover {
       transform: translateY(-2px);
-      border-color: rgba(127,211,255,0.28);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 16px 30px rgba(70,130,255,0.2);
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--line));
+      box-shadow: 0 12px 26px rgba(0,0,0,0.18);
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.35fr;
+      gap: 18px;
+      align-items: start;
+    }
+    .stack {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .panel-title {
+      margin: 0;
+      font-size: 1.15rem;
+      letter-spacing: -.02em;
+    }
+    .panel-sub {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .95rem;
+    }
+
+    .links-toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
     .links-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      width: 100%;
-      align-items: start;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 16px;
+      min-height: 100px;
     }
-
     .link-card {
       position: relative;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 176px;
+      padding: 18px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
       text-decoration: none;
       color: inherit;
-      border-radius: 22px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 10px 28px rgba(0,0,0,0.14);
+      transition: transform .18s ease, box-shadow .25s ease, border-color .18s ease, background .18s ease;
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
-      border: 1px solid rgba(255,255,255,0.08);
-      min-height: 154px;
-      padding: 18px;
-      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.25s ease, background 0.25s ease;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 8px 24px rgba(0,0,0,0.18);
-      backdrop-filter: blur(10px);
+      cursor: grab;
     }
-
     .link-card::after {
       content: "";
       position: absolute;
-      inset: auto -20% -40% auto;
-      width: 140px;
-      height: 140px;
+      width: 160px;
+      height: 160px;
+      right: -48px;
+      bottom: -72px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(127,211,255,0.22), transparent 70%);
+      background: radial-gradient(circle, color-mix(in srgb, var(--accent) 25%, transparent), transparent 70%);
+      opacity: .9;
+      transition: transform .22s ease;
       pointer-events: none;
-      transition: transform 0.25s ease;
-      opacity: 0.85;
     }
-
     .link-card:hover {
-      transform: translateY(-6px) scale(1.01);
-      border-color: rgba(127,211,255,0.26);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.26), 0 0 0 1px rgba(127,211,255,0.08) inset;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035));
+      transform: translateY(-5px) rotateX(2deg) rotateY(-2deg);
+      border-color: color-mix(in srgb, var(--accent) 36%, var(--line));
+      box-shadow: 0 20px 42px rgba(0,0,0,0.24), 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent) inset;
     }
-
-    .link-card:hover::after {
-      transform: scale(1.18);
-    }
-
-    .link-top {
+    .link-card:hover::after { transform: scale(1.18); }
+    .link-card.dragging { opacity: .55; transform: scale(.98); }
+    .link-card-top {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
       align-items: flex-start;
     }
-
     .icon-badge {
-      width: 42px;
-      height: 42px;
+      width: 46px;
+      height: 46px;
       border-radius: 14px;
       display: grid;
       place-items: center;
@@ -265,205 +620,160 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
       font-size: 18px;
     }
-
     .pill {
-      font-size: 0.74rem;
-      letter-spacing: 0.05em;
+      font-size: .73rem;
+      letter-spacing: .08em;
       text-transform: uppercase;
-      color: #dce7ff;
+      color: var(--text);
       padding: 8px 10px;
       border-radius: 999px;
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
+      width: fit-content;
     }
-
-    .link-card h4 {
-      margin: 16px 0 8px;
-      font-size: 1.15rem;
-      letter-spacing: -0.02em;
-    }
-
-    .link-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.5;
-      font-size: 0.95rem;
-      max-width: 95%;
-    }
-
-    .stats-shell {
-      position: relative;
-      overflow: hidden;
-      border-radius: 26px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-      border: 1px solid var(--line);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 12px 38px rgba(0,0,0,0.22);
-      backdrop-filter: blur(18px) saturate(140%);
-      padding: 20px;
-    }
-
-    .stats-shell::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent 55%);
-      transform: translateX(-100%);
-      transition: transform 0.9s ease;
-      pointer-events: none;
-    }
-
-    .stats-shell:hover::before {
-      transform: translateX(100%);
-    }
-
-    .stats-header {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
-    }
-
-    .stats-title-wrap h3 {
-      margin: 0;
-      font-size: 1.25rem;
-      letter-spacing: -0.02em;
-    }
-
-    .stats-title-wrap p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .stats-actions {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .stats-link {
-      text-decoration: none;
-      color: var(--text);
-      padding: 10px 14px;
+    .link-card h4 { margin: 6px 0 0; font-size: 1.06rem; }
+    .link-card p { margin: 0; color: var(--muted); line-height: 1.52; font-size: .93rem; }
+    .link-card .thumb {
+      margin-top: auto;
+      height: 54px;
       border-radius: 14px;
-      background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      background:
+        linear-gradient(135deg, color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    }
+    .card-actions {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      display: flex;
+      gap: 8px;
+      opacity: 0;
+      transition: .18s ease;
+    }
+    .link-card:hover .card-actions { opacity: 1; }
+    .mini-icon-btn {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(8,12,20,0.5);
+      color: white;
+      cursor: pointer;
     }
 
-    .stats-link:hover {
-      transform: translateY(-2px);
-      border-color: rgba(127,211,255,0.28);
-      box-shadow: 0 12px 26px rgba(0,0,0,0.2);
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 16px;
     }
+
+    .weather-box,
+    .today-box,
+    .notes-box,
+    .media-box,
+    .recent-box,
+    .ai-box,
+    .quest-box,
+    .settings-box,
+    .stat-box,
+    .ge-box {
+      padding: 18px;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 12px;
+    }
+    .kpi {
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.045);
+    }
+    .kpi .label {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .74rem;
+      margin-bottom: 8px;
+    }
+    .kpi .value { font-size: 1.22rem; font-weight: 800; letter-spacing: -.02em; }
 
     .stats-grid {
-      position: relative;
-      z-index: 1;
       display: grid;
-      grid-template-columns: 1.05fr 1.35fr;
-      gap: 18px;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 16px;
     }
-
     .stats-card,
-    .skills-card {
+    .skills-card,
+    .activity-card,
+    .goal-card,
+    .quest-card,
+    .ge-result,
+    .notes-list,
+    .recent-list,
+    .settings-list,
+    .prompt-list {
       border-radius: 22px;
       background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.025));
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.16);
-      padding: 18px;
-      min-height: 220px;
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 8px 24px rgba(0,0,0,0.12);
+      padding: 16px;
     }
-
     .stats-meta {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0,1fr));
       gap: 12px;
       margin-top: 14px;
     }
-
     .stat-chip {
       padding: 14px;
       border-radius: 16px;
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(255,255,255,0.06);
     }
-
     .stat-chip-label {
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: .8rem;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: .08em;
       margin-bottom: 6px;
     }
-
     .stat-chip-value {
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       font-weight: 700;
-      letter-spacing: -0.02em;
+      letter-spacing: -.02em;
       word-break: break-word;
     }
+    .stats-status, .soft-text { color: var(--muted); line-height: 1.6; margin: 0; }
+    .stats-status strong { color: var(--text); }
 
-    .stats-status {
-      color: var(--muted);
-      line-height: 1.6;
-      margin: 0;
-    }
-
-    .stats-status strong {
-      color: var(--text);
-    }
-
-    .skills-header {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: center;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-
-    .skills-header h4,
-    .stats-card h4 {
-      margin: 0;
-      font-size: 1rem;
-    }
-
-    .skills-list {
+    .skills-list, .activity-list, .note-list, .recent-listing, .quest-list, .saved-prompts {
       display: grid;
       gap: 10px;
     }
-
     .skill-row {
       display: grid;
-      grid-template-columns: 120px 1fr auto;
+      grid-template-columns: 28px 124px 1fr auto;
       gap: 12px;
       align-items: center;
     }
-
-    .skill-name,
-    .skill-level,
-    .skill-xp {
-      font-size: 0.92rem;
+    .skill-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 14px;
     }
-
-    .skill-name {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .skill-level,
-    .skill-xp {
-      color: var(--muted);
-    }
-
+    .skill-name { font-weight: 700; font-size: .93rem; }
+    .skill-level, .skill-xp { color: var(--muted); font-size: .88rem; }
     .skill-bar {
       height: 10px;
       border-radius: 999px;
@@ -471,357 +781,1486 @@
       overflow: hidden;
       position: relative;
     }
-
     .skill-bar-fill {
       height: 100%;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      box-shadow: 0 0 18px rgba(127,211,255,0.25);
+      box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 30%, transparent);
     }
 
-    .stats-footnote {
-      margin-top: 16px;
-      color: var(--muted);
-      font-size: 0.9rem;
-      line-height: 1.6;
+    .ring-wrap {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .ring {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: conic-gradient(var(--accent) 0deg, var(--accent-2) 220deg, rgba(255,255,255,0.08) 220deg);
+      position: relative;
+      box-shadow: inset 0 0 24px rgba(0,0,0,0.14);
+    }
+    .ring::after {
+      content: "";
+      position: absolute;
+      inset: 11px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--bg-2) 70%, transparent), color-mix(in srgb, var(--bg-1) 70%, transparent));
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .ring-center {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .ring-center strong { display: block; font-size: 1.46rem; }
+    .ring-center span { font-size: .82rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+
+    .list-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .list-row:last-child { border-bottom: 0; }
+    .list-meta { color: var(--muted); font-size: .88rem; line-height: 1.5; }
+
+    .search-inline {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
     }
 
-    .stats-footnote code {
+    .ge-layout {
+      display: grid;
+      grid-template-columns: .95fr 1.05fr;
+      gap: 16px;
+    }
+    .ge-thumb {
+      width: 76px;
+      height: 76px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
       background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      overflow: hidden;
+      font-size: 1.6rem;
+    }
+    .ge-result-head {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .ge-price-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .quest-toolbar, .notes-toolbar, .settings-toolbar, .prompt-toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .quest-item, .note-item, .recent-item, .activity-item, .prompt-item {
+      padding: 14px;
+      border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 8px;
-      padding: 2px 6px;
+      background: rgba(255,255,255,0.04);
+    }
+    .quest-item.pinned, .note-item.pinned {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, transparent), rgba(255,255,255,0.04));
+    }
+
+    .footer-bar {
+      padding: 18px 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.46);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      padding: 20px;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal {
+      width: min(760px, 100%);
+      max-height: 88vh;
+      overflow: auto;
+      border-radius: 28px;
+      background: linear-gradient(180deg, var(--panel), color-mix(in srgb, var(--panel-2) 92%, transparent));
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 30px 80px rgba(0,0,0,0.34);
+      padding: 18px;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+    }
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+    .field label {
+      color: var(--muted);
+      font-size: .86rem;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      min-height: 52px;
+      padding: 0 14px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,0.055);
       color: var(--text);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.9em;
+      outline: none;
+    }
+    .field textarea { min-height: 110px; padding: 12px 14px; resize: vertical; }
+    .field.full { grid-column: 1 / -1; }
+
+    .cmd-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      background: rgba(0,0,0,0.46);
+      backdrop-filter: blur(10px);
+      z-index: 30;
+      padding: 10vh 18px 18px;
+    }
+    .cmd-backdrop.show { display: flex; }
+    .cmd {
+      width: min(820px, 100%);
+      border-radius: 28px;
+      background: linear-gradient(180deg, var(--panel), color-mix(in srgb, var(--panel-2) 95%, transparent));
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 30px 80px rgba(0,0,0,0.38);
+      overflow: hidden;
+    }
+    .cmd-input {
+      width: 100%;
+      height: 68px;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1.06rem;
+      padding: 0 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .cmd-results {
+      max-height: 420px;
+      overflow: auto;
+      display: grid;
+      gap: 0;
+    }
+    .cmd-item {
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      padding: 14px 18px;
+      cursor: pointer;
+      display: grid;
+      gap: 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .cmd-item:hover, .cmd-item.active { background: rgba(255,255,255,0.06); }
+    .cmd-label { font-weight: 700; }
+    .cmd-desc { color: var(--muted); font-size: .92rem; }
+
+    .toast-wrap {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 40;
+      display: grid;
+      gap: 10px;
+    }
+    .toast {
+      min-width: 280px;
+      max-width: 360px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(8,12,20,0.86);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.3);
+      animation: toastIn .22s ease;
+    }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(12px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    @media (max-width: 1050px) {
-      .links-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      border-radius: 14px;
+      min-height: 18px;
+    }
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      animation: shimmer 1.2s infinite;
+    }
+    @keyframes shimmer { 100% { transform: translateX(100%); } }
 
-      .stats-grid {
-        grid-template-columns: 1fr;
-      }
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 1200px) {
+      .hero, .main-grid, .stats-grid, .ge-layout { grid-template-columns: 1fr; }
+      .links-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .module-grid { grid-template-columns: 1fr; }
     }
 
-    .vault-title h1 {
-      font-size: 2.6rem;
-      letter-spacing: 0.15em;
-      margin: 10px 0 6px;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 25px rgba(127,211,255,0.25);
-    }
-
-    .vault-title {
-      margin-bottom: 4px;
-      user-select: none;
-    }
-
-    @media (max-width: 720px) {
-      .app {
-        padding: 16px;
+    @media (max-width: 860px) {
+      .app-shell { padding-left: 0; }
+      .dock {
+        left: 16px;
+        right: 16px;
+        top: auto;
+        bottom: 16px;
+        width: auto;
+        height: 74px;
+        flex-direction: row;
+        padding: 10px;
+        border-radius: 24px;
       }
-
-      .launcher {
-        gap: 16px;
+      .dock-logo { width: 44px; height: 44px; flex: 0 0 auto; }
+      .dock-nav, .dock-bottom {
+        display: flex;
+        width: auto;
+        margin-top: 0;
+        gap: 8px;
       }
-
-      .search-form {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .search-engine-badge,
-      .search-button {
-        width: 100%;
-      }
-
-      .links-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .search-shell {
-        position: relative;
-        top: 0;
-      }
-
-      .stats-meta {
-        grid-template-columns: 1fr;
-      }
-
-      .skill-row {
-        grid-template-columns: 1fr;
-      }
+      .dock-bottom { margin-left: auto; }
+      .dock-btn { width: 46px; height: 46px; }
+      .dock-btn .hint { display: none; }
+      .container { padding: 14px 14px 104px; }
+      .search-shell { position: relative; top: 0; }
+      .search-form { grid-template-columns: 1fr; }
+      .links-grid, .field-grid, .kpi-grid, .mini-grid { grid-template-columns: 1fr; }
+      .skill-row { grid-template-columns: 28px 1fr; }
+      .skill-bar, .skill-xp { grid-column: 2; }
     }
   </style>
 </head>
 <body>
+  <canvas id="starfield"></canvas>
   <canvas id="particles"></canvas>
+  <div id="gridOverlay"></div>
+  <div class="scan-line" id="scanLine"></div>
 
-  <main class="app">
-    <div class="launcher">
-      <header class="vault-title">
-        <h1>TONY'S VAULT</h1>
-      </header>
-      <section class="search-shell">
-        <form class="search-form" action="https://duckduckgo.com/" method="get" target="_blank" rel="noreferrer">
-          <div class="search-engine-badge">DuckDuckGo</div>
+  <aside class="dock" aria-label="Primary navigation">
+    <div class="dock-logo">TV</div>
+    <nav class="dock-nav">
+      <a class="dock-btn active" href="#heroSection" data-nav><span>🏠</span><span class="hint">Home</span></a>
+      <a class="dock-btn" href="#searchSection" data-nav><span>⌕</span><span class="hint">Search</span></a>
+      <a class="dock-btn" href="#linksSection" data-nav><span>◫</span><span class="hint">Launch</span></a>
+      <a class="dock-btn" href="#statsSection" data-nav><span>⚔️</span><span class="hint">RS3</span></a>
+      <a class="dock-btn" href="#geSection" data-nav><span>💰</span><span class="hint">Grand Exchange</span></a>
+      <a class="dock-btn" href="#questsSection" data-nav><span>📜</span><span class="hint">Quests</span></a>
+      <a class="dock-btn" href="#notesSection" data-nav><span>📝</span><span class="hint">Notes</span></a>
+    </nav>
+    <div class="dock-bottom">
+      <button class="dock-btn" id="commandOpenBtn" type="button"><span>⌘</span><span class="hint">Command Palette</span></button>
+      <button class="dock-btn" id="settingsOpenBtn" type="button"><span>⚙️</span><span class="hint">Settings</span></button>
+    </div>
+  </aside>
+
+  <div class="app-shell">
+    <main class="container">
+      <section class="glass hero reveal" id="heroSection">
+        <div class="hero-main">
+          <div class="section-tag">Vault OS · Personal Command Center</div>
+          <h1 class="hero-title">TONY'S VAULT</h1>
+          <p class="hero-subtitle">A futuristic personal launch hub with live RuneScape tools, customizable links, command search, notes, quest tracking, media shortcuts, and system controls.</p>
+          <div class="hero-inline">
+            <div class="pulse-chip"><span class="pulse-dot"></span><span id="rotatingStatus">SYSTEM ONLINE</span></div>
+            <div class="metric-chip"><strong id="liveClock">--:--</strong></div>
+            <div class="metric-chip"><span id="liveDate">Loading date…</span></div>
+            <div class="metric-chip"><span id="currentThemeBadge">VOID BLUE</span></div>
+          </div>
+        </div>
+        <div class="hero-side">
+          <div class="mini-grid">
+            <div class="mini-card">
+              <div class="mini-label">Today in the Vault</div>
+              <div class="mini-value" id="todayHeadline">Ready</div>
+              <div class="mini-sub" id="todaySub">Booting your favorite tools and saved modules.</div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-label">Weather</div>
+              <div class="mini-value" id="weatherTemp">—</div>
+              <div class="mini-sub" id="weatherSummary">Weather unavailable</div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-label">Most Used Link</div>
+              <div class="mini-value" id="mostUsedLink">YouTube</div>
+              <div class="mini-sub" id="mostUsedLinkMeta">No usage data yet</div>
+            </div>
+            <div class="mini-card">
+              <div class="mini-label">Pinned Goal</div>
+              <div class="mini-value" id="heroPinnedGoal">None yet</div>
+              <div class="mini-sub">Pin a note or quest to surface it here.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="glass section search-shell reveal" id="searchSection">
+        <div class="search-top">
+          <div>
+            <h2 class="panel-title" style="margin:0;">Universal Search</h2>
+            <p class="panel-sub">Search the web, YouTube, Reddit, RuneScape Wiki, ChatGPT, or jump directly to vault commands.</p>
+          </div>
+          <div class="search-tabs" id="searchModeTabs"></div>
+        </div>
+        <form class="search-form" id="mainSearchForm">
           <div class="search-input-wrap">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M21 21L16.65 16.65M18 11C18 14.866 14.866 18 11 18C7.13401 18 4 14.866 4 11C4 7.13401 7.13401 4 11 4C14.866 4 18 7.13401 18 11Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            <input class="search-input" type="text" name="q" placeholder="Search the web..." autocomplete="off" />
+            <input class="input" id="mainSearchInput" type="text" placeholder="Search the web or type a command…" autocomplete="off" />
           </div>
-          <button class="search-button" type="submit">Search</button>
+          <button class="primary-btn" type="submit">Search</button>
+          <button class="ghost-btn" type="button" id="smartActionBtn">Open Command Palette</button>
         </form>
       </section>
 
-      <div class="links-grid" id="linksGrid">
-        <a class="link-card" href="https://www.youtube.com/" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">▶️</div>
-            <div class="pill">Media</div>
-          </div>
-          <h4>YouTube</h4>
-          <p>Videos, music, and streams.</p>
-        </a>
+      <div class="main-grid">
+        <div class="stack">
+          <section class="glass section reveal" id="linksSection">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Quick Launch</h2>
+                <p class="panel-sub">Editable, draggable, and stored locally. Build your own futuristic launch board.</p>
+              </div>
+              <div class="links-toolbar">
+                <button class="tiny-btn" id="addLinkBtn" type="button">Add Link</button>
+                <button class="tiny-btn" id="resetLinksBtn" type="button">Reset</button>
+              </div>
+            </div>
+            <div class="links-grid" id="linksGrid"></div>
+          </section>
 
-        <a class="link-card" href="https://fmhy.net/" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">🌐</div>
-            <div class="pill">Web</div>
-          </div>
-          <h4>FMHY</h4>
-          <p>Large web resource index.</p>
-        </a>
+          <section class="glass section today-box reveal">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Today in the Vault</h2>
+                <p class="panel-sub">Your status board, reminders, and recent launch behavior.</p>
+              </div>
+            </div>
+            <div class="kpi-grid" id="todayKpis"></div>
+          </section>
 
-        <a class="link-card" href="https://runescape.wiki/w/Ores" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">⛏️</div>
-            <div class="pill">RS Wiki</div>
-          </div>
-          <h4>Ores</h4>
-          <p>Ore tables, mining resources, and smithing materials.</p>
-        </a>
+          <section class="glass section recent-box reveal">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Recent & Most Used</h2>
+                <p class="panel-sub">Your latest launches, top links, and last viewed GE items.</p>
+              </div>
+            </div>
+            <div class="recent-list" id="recentModules"></div>
+          </section>
 
-        <a class="link-card" href="https://runescape.wiki/w/Bars" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">🔥</div>
-            <div class="pill">RS Wiki</div>
-          </div>
-          <h4>Bars</h4>
-          <p>Smelting and bar information for smithing.</p>
-        </a>
+          <section class="glass section media-box reveal">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Media Corner</h2>
+                <p class="panel-sub">Fast jumps to your media spaces and ambient listening.</p>
+              </div>
+              <div class="pill">Audio Utility</div>
+            </div>
+            <div class="search-inline" style="margin-bottom:12px;">
+              <input class="input" id="ambientInput" style="padding-left:16px;" value="https://www.youtube.com/watch?v=jfKfPfyJRdk" placeholder="Paste a YouTube or music link" />
+              <button class="primary-btn" id="ambientSaveBtn" type="button">Save</button>
+            </div>
+            <div class="list-row"><div><strong>Ambient Link</strong><div class="list-meta" id="ambientMeta">Saved locally for quick launch.</div></div><button class="tiny-btn" id="ambientLaunchBtn" type="button">Open</button></div>
+            <div class="list-row"><div><strong>YouTube</strong><div class="list-meta">Streams, videos, and music.</div></div><button class="tiny-btn" data-open-url="https://www.youtube.com/" type="button">Open</button></div>
+            <div class="list-row"><div><strong>Spotify Web</strong><div class="list-meta">Launch your music workspace.</div></div><button class="tiny-btn" data-open-url="https://open.spotify.com/" type="button">Open</button></div>
+          </section>
+        </div>
 
-        <a class="link-card" href="https://runescape.wiki/w/Money_making_guide" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">💰</div>
-            <div class="pill">Guide</div>
-          </div>
-          <h4>Money Making Guide</h4>
-          <p>Profit methods and money making ideas.</p>
-        </a>
+        <div class="stack">
+          <section class="glass section reveal" id="statsSection">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Ashina Vera · RS3 Dashboard</h2>
+                <p class="panel-sub">Live profile snapshot, skill analysis, activity feed, quest data, and account insight with browser-friendly fallback handling.</p>
+              </div>
+              <div class="links-toolbar">
+                <a class="tiny-btn" href="https://runepixels.com/players/ashina-vera/skills" target="_blank" rel="noreferrer">RunePixels</a>
+                <a class="tiny-btn" href="https://apps.runescape.com/runemetrics/app/search" target="_blank" rel="noreferrer">RuneMetrics</a>
+              </div>
+            </div>
 
-        <a class="link-card" href="https://runescape.wiki/w/Revolution/Bars" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">⚔️</div>
-            <div class="pill">Combat</div>
-          </div>
-          <h4>Revolution Bars</h4>
-          <p>Combat ability bar setups.</p>
-        </a>
+            <div class="kpi-grid" id="statsKpiGrid">
+              <div class="kpi"><div class="label">Overall Level</div><div class="value" id="overallLevel">—</div></div>
+              <div class="kpi"><div class="label">Overall XP</div><div class="value" id="overallXp">—</div></div>
+              <div class="kpi"><div class="label">Overall Rank</div><div class="value" id="overallRank">—</div></div>
+              <div class="kpi"><div class="label">Combat Level</div><div class="value" id="combatLevel">—</div></div>
+            </div>
 
-        <a class="link-card" href="https://runescape.wiki/w/Armour" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">🛡️</div>
-            <div class="pill">Gear</div>
-          </div>
-          <h4>Armour</h4>
-          <p>Armour reference and equipment upgrades.</p>
-        </a>
+            <div class="stats-grid" style="margin-top:16px;">
+              <article class="stats-card">
+                <div class="ring-wrap">
+                  <div class="ring" id="overallRing">
+                    <div class="ring-center"><strong id="overallRingValue">—</strong><span>Total</span></div>
+                  </div>
+                  <div>
+                    <h3 style="margin:0 0 8px;">Account Snapshot</h3>
+                    <p class="stats-status" id="statsStatus"><strong>Loading…</strong> Fetching hiscores and profile data for Ashina Vera.</p>
+                  </div>
+                </div>
+                <div class="stats-meta">
+                  <div class="stat-chip"><div class="stat-chip-label">Quests Complete</div><div class="stat-chip-value" id="questCount">—</div></div>
+                  <div class="stat-chip"><div class="stat-chip-label">Activities Loaded</div><div class="stat-chip-value" id="activityCount">—</div></div>
+                  <div class="stat-chip"><div class="stat-chip-label">Top Combat Style</div><div class="stat-chip-value" id="combatStyle">—</div></div>
+                  <div class="stat-chip"><div class="stat-chip-label">XP To Next Goal</div><div class="stat-chip-value" id="xpToGoal">—</div></div>
+                </div>
+                <p class="soft-text" style="margin-top:14px;" id="statsFootnote">If this page is opened as a file URL, most browsers block live API fetches. Serve it over localhost for live stats.</p>
+                <div class="links-toolbar" id="localServerHelp" hidden>
+                  <button class="tiny-btn" id="copyServerCmd" type="button">Copy local server command</button>
+                  <button class="tiny-btn" data-open-url="https://runepixels.com/players/ashina-vera/skills" type="button">Open RunePixels</button>
+                </div>
+              </article>
 
-        <a class="link-card" href="https://runescape.wiki/w/Weapons" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">🗡️</div>
-            <div class="pill">Gear</div>
-          </div>
-          <h4>Weapons</h4>
-          <p>Weapon tables and combat gear.</p>
-        </a>
+              <article class="skills-card">
+                <div class="panel-header" style="margin-bottom:12px;">
+                  <div>
+                    <h3 class="panel-title">Top Skills</h3>
+                    <p class="panel-sub">Highest levels and progress bars.</p>
+                  </div>
+                  <div class="pill">Live Lookup</div>
+                </div>
+                <div class="skills-list" id="skillsList"></div>
+              </article>
+            </div>
 
-        <a class="link-card" href="https://runescape.wiki/w/List_of_quests" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">📜</div>
-            <div class="pill">Questing</div>
-          </div>
-          <h4>List of Quests</h4>
-          <p>Quest hub and requirements.</p>
-        </a>
+            <div class="module-grid" style="margin-top:16px;">
+              <article class="activity-card">
+                <div class="panel-header" style="margin-bottom:12px;">
+                  <div>
+                    <h3 class="panel-title">Recent Activity</h3>
+                    <p class="panel-sub">RuneMetrics activity feed when available.</p>
+                  </div>
+                </div>
+                <div class="activity-list" id="activityList"></div>
+              </article>
+              <article class="goal-card">
+                <div class="panel-header" style="margin-bottom:12px;">
+                  <div>
+                    <h3 class="panel-title">Combat Breakdown</h3>
+                    <p class="panel-sub">Dominant style and level spread.</p>
+                  </div>
+                </div>
+                <div class="note-list" id="combatBreakdown"></div>
+              </article>
+            </div>
+          </section>
 
-        <a class="link-card" href="https://chatgpt.com/" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">🧠</div>
-            <div class="pill">AI</div>
-          </div>
-          <h4>ChatGPT</h4>
-          <p>Your AI workspace.</p>
-        </a>
+          <section class="glass section ge-box reveal" id="geSection">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Grand Exchange Lookup</h2>
+                <p class="panel-sub">Search RuneScape items, open item pages fast, and keep a recent item watchlist inside the vault.</p>
+              </div>
+              <div class="pill">Item Intelligence</div>
+            </div>
+            <div class="ge-layout">
+              <div>
+                <div class="search-inline">
+                  <input class="input" id="geSearchInput" style="padding-left:16px;" placeholder="Search an item, e.g. primal 2h sword" />
+                  <button class="primary-btn" id="geSearchBtn" type="button">Search</button>
+                </div>
+                <div class="soft-text" style="margin-top:10px;">Uses browser-friendly fallbacks. If live lookup fails, the vault still gives direct wiki and item database links.</div>
+                <div class="recent-list" id="geRecentList" style="margin-top:14px;"></div>
+              </div>
+              <div class="ge-result" id="geResultPane">
+                <div class="ge-result-head">
+                  <div class="ge-thumb" id="geThumb">💠</div>
+                  <div>
+                    <h3 style="margin:0;" id="geItemName">No item selected</h3>
+                    <div class="list-meta" id="geItemMeta">Search for a RuneScape item to load price details and quick links.</div>
+                  </div>
+                </div>
+                <div class="ge-price-grid">
+                  <div class="stat-chip"><div class="stat-chip-label">Current Price</div><div class="stat-chip-value" id="geCurrentPrice">—</div></div>
+                  <div class="stat-chip"><div class="stat-chip-label">Today</div><div class="stat-chip-value" id="geTodayChange">—</div></div>
+                  <div class="stat-chip"><div class="stat-chip-label">30 Days</div><div class="stat-chip-value" id="ge30">—</div></div>
+                  <div class="stat-chip"><div class="stat-chip-label">90 Days</div><div class="stat-chip-value" id="ge90">—</div></div>
+                </div>
+                <div class="links-toolbar" style="margin-top:14px;">
+                  <a class="tiny-btn" href="#" id="geWikiLink" target="_blank" rel="noreferrer">Open Wiki</a>
+                  <a class="tiny-btn" href="#" id="geDbLink" target="_blank" rel="noreferrer">Open Item DB</a>
+                  <button class="tiny-btn" id="geCopyBtn" type="button">Copy Item Name</button>
+                </div>
+                <p class="soft-text" style="margin-top:14px;" id="geDesc">Grand Exchange details will appear here after a search.</p>
+              </div>
+            </div>
+          </section>
 
-        <a class="link-card" href="https://v1.y2mate.nu/" target="_blank" rel="noreferrer">
-          <div class="link-top">
-            <div class="icon-badge">⬇️</div>
-            <div class="pill">Utility</div>
-          </div>
-          <h4>Y2Mate</h4>
-          <p>Media download utility.</p>
-        </a>
+          <section class="glass section quest-box reveal" id="questsSection">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Quest Hub</h2>
+                <p class="panel-sub">Search quests, pin a current goal, and jump to official references fast.</p>
+              </div>
+              <div class="pill">Quest Control</div>
+            </div>
+            <div class="quest-toolbar">
+              <input class="input" id="questSearchInput" style="padding-left:16px; min-height:48px;" placeholder="Search quest name or tag" />
+              <select id="questFilter" class="ghost-btn" style="min-height:48px; padding:0 14px; background:rgba(255,255,255,0.05);">
+                <option value="all">All</option>
+                <option value="pinned">Pinned</option>
+                <option value="starter">Starter</option>
+                <option value="combat">Combat</option>
+                <option value="skilling">Skilling</option>
+                <option value="story">Story</option>
+              </select>
+              <button class="tiny-btn" id="addQuestBtn" type="button">Add Custom Quest</button>
+            </div>
+            <div class="quest-list" id="questList"></div>
+          </section>
+
+          <section class="glass section ai-box reveal" id="aiSection">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">AI Tools Panel</h2>
+                <p class="panel-sub">Gemini-powered RS3 research, planning, item questions, and vault assistance. API key stays local in your browser and is never hardcoded into the page.</p>
+              </div>
+              <div class="links-toolbar">
+                <button class="tiny-btn" id="addPromptBtn" type="button">Add Prompt</button>
+                <button class="tiny-btn" id="clearAiChatBtn" type="button">Clear Chat</button>
+              </div>
+            </div>
+
+            <div class="module-grid" style="margin-bottom:16px;">
+              <article class="prompt-list">
+                <div class="panel-header" style="margin-bottom:10px;">
+                  <div>
+                    <h3 class="panel-title">Saved Prompts</h3>
+                    <p class="panel-sub">Reusable AI prompts for research and planning.</p>
+                  </div>
+                </div>
+                <div id="promptList"></div>
+              </article>
+
+              <article class="settings-list">
+                <div class="panel-header" style="margin-bottom:10px;">
+                  <div>
+                    <h3 class="panel-title">Gemini Connection</h3>
+                    <p class="panel-sub">Gemini is wired directly into the vault. The API key is embedded in the page code for your private local deployment.</p>
+                  </div>
+                </div>
+                <div class="field-grid">
+                  <div class="field full">
+                    <label>Gemini API Key</label>
+                    <input id="geminiApiKeyInput" type="password" placeholder="Paste Gemini API key" />
+                  </div>
+                </div>
+                <div class="links-toolbar" style="margin-top:12px;">
+                  <button class="tiny-btn" id="saveGeminiKeyBtn" type="button">Update Embedded Key</button>
+                  <button class="tiny-btn" id="removeGeminiKeyBtn" type="button">Clear Runtime Key</button>
+                  <span class="pill" id="geminiStatusBadge">Connected</span>
+                </div>
+                <p class="soft-text" style="margin-top:12px;">Recommended model: <code>gemini-1.5-flash</code>. The vault uses the Gemini generateContent API directly from the browser with your embedded key by default.</p>
+              </article>
+            </div>
+
+            <article class="stats-card">
+              <div class="panel-header" style="margin-bottom:12px;">
+                <div>
+                  <h3 class="panel-title">Vault AI Console</h3>
+                  <p class="panel-sub">Ask for RS3 money makers, quest order, GE ideas, gear goals, or anything else.</p>
+                </div>
+                <div class="pill">Gemini Live</div>
+              </div>
+              <div class="skills-list" id="aiChatMessages" style="margin-bottom:14px;"></div>
+              <div class="quest-toolbar">
+                <button class="tiny-btn" type="button" data-ai-fill="Analyze my RS3 account goals and recommend the best next steps.">Account Plan</button>
+                <button class="tiny-btn" type="button" data-ai-fill="Find strong RS3 money making ideas I should research next.">Money Making</button>
+                <button class="tiny-btn" type="button" data-ai-fill="Build me a useful quest priority order for account progression.">Quest Path</button>
+                <button class="tiny-btn" type="button" data-ai-fill="Give me GE item ideas to investigate for profit and volume.">GE Ideas</button>
+              </div>
+              <div class="field-grid" style="margin-top:10px;">
+                <div class="field full">
+                  <label>Message</label>
+                  <textarea id="aiPromptInput" placeholder="Ask Gemini something useful for your vault..."></textarea>
+                </div>
+              </div>
+              <div class="links-toolbar" style="margin-top:12px;">
+                <button class="primary-btn" id="sendAiBtn" type="button">Send to Gemini</button>
+                <button class="ghost-btn" id="useStatsContextBtn" type="button">Use RS3 Context</button>
+              </div>
+            </article>
+          </section>
+
+          <section class="glass section notes-box reveal" id="notesSection">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Notes & Goals</h2>
+                <p class="panel-sub">Quick scratchpad, pinned goals, and to-do tracking saved inside the browser.</p>
+              </div>
+              <button class="tiny-btn" id="addNoteBtn" type="button">Add Note</button>
+            </div>
+            <div class="notes-toolbar">
+              <input class="input" id="noteFilterInput" style="padding-left:16px; min-height:48px;" placeholder="Filter notes" />
+            </div>
+            <div class="notes-list" id="notesList"></div>
+          </section>
+        </div>
+
+        <div class="stack">
+          <section class="glass section settings-box reveal" id="settingsSection">
+            <div class="panel-header">
+              <div>
+                <h2 class="panel-title">Visual Modes & Controls</h2>
+                <p class="panel-sub">Theme, particles, blur, glow, scan lines, and compact mode.</p>
+              </div>
+            </div>
+            <div class="settings-list" id="settingsList"></div>
+          </section>
+        </div>
       </div>
 
-      <section class="stats-shell" id="playerStatsSection">
-        <div class="stats-header">
-          <div class="stats-title-wrap">
-            <h3>Ashina Vera · RS3 Stats</h3>
-            <p>Live player data pulled in from RuneScape sources, with fallback handling for local start-page use.</p>
-          </div>
-          <div class="stats-actions">
-            <a class="stats-link" href="https://runepixels.com/players/ashina-vera/skills" target="_blank" rel="noreferrer">Open RunePixels</a>
-            <a class="stats-link" href="https://apps.runescape.com/runemetrics/app/search" target="_blank" rel="noreferrer">Open RuneMetrics</a>
-          </div>
-        </div>
+      <footer class="glass footer-bar reveal">
+        <span>TONY'S VAULT · Futuristic start page · Local-first customization</span>
+        <span>Press <strong>Ctrl + K</strong> or <strong>/</strong> for the command palette.</span>
+      </footer>
+    </main>
+  </div>
 
-        <div class="stats-grid">
-          <article class="stats-card">
-            <h4>Account snapshot</h4>
-            <p class="stats-status" id="statsStatus"><strong>Loading…</strong> Fetching hiscores and profile data for Ashina Vera.</p>
-            <div class="stats-meta" id="statsMeta">
-              <div class="stat-chip">
-                <div class="stat-chip-label">Overall Level</div>
-                <div class="stat-chip-value" id="overallLevel">—</div>
-              </div>
-              <div class="stat-chip">
-                <div class="stat-chip-label">Overall XP</div>
-                <div class="stat-chip-value" id="overallXp">—</div>
-              </div>
-              <div class="stat-chip">
-                <div class="stat-chip-label">Overall Rank</div>
-                <div class="stat-chip-value" id="overallRank">—</div>
-              </div>
-              <div class="stat-chip">
-                <div class="stat-chip-label">Combat Level</div>
-                <div class="stat-chip-value" id="combatLevel">—</div>
-              </div>
-              <div class="stat-chip">
-                <div class="stat-chip-label">Quests Complete</div>
-                <div class="stat-chip-value" id="questCount">—</div>
-              </div>
-              <div class="stat-chip">
-                <div class="stat-chip-label">Activities Loaded</div>
-                <div class="stat-chip-value" id="activityCount">—</div>
-              </div>
-            </div>
-            <p class="stats-footnote" id="statsFootnote">If this page is opened as a <code>file://</code> page, most browsers block live API fetches. Serve it over <code>http://localhost</code> for live stats.</p>
-            <div class="stats-actions" id="localServerHelp" style="margin-top:12px; display:none;">
-              <button class="search-button" id="copyServerCmd" type="button">Copy local server command</button>
-              <a class="stats-link" href="https://runepixels.com/players/ashina-vera/skills" target="_blank" rel="noreferrer">Open RunePixels page</a>
-            </div>
-          </article>
-
-          <article class="skills-card">
-            <div class="skills-header">
-              <h4>Top skills</h4>
-              <div class="pill">Live lookup</div>
-            </div>
-            <div class="skills-list" id="skillsList">
-              <p class="stats-status">Waiting for skill data…</p>
-            </div>
-          </article>
+  <div class="modal-backdrop" id="linkModalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin:0;" id="linkModalTitle">Add Link</h3>
+          <p class="panel-sub" style="margin:6px 0 0;">Create or edit a quick-launch card.</p>
         </div>
-      </section>
+        <button class="icon-btn" type="button" data-close-modal="linkModalBackdrop">✕</button>
+      </div>
+      <form id="linkForm">
+        <div class="field-grid">
+          <div class="field"><label>Title</label><input id="linkTitle" required /></div>
+          <div class="field"><label>Category</label><input id="linkCategory" required placeholder="Media, AI, RS Wiki" /></div>
+          <div class="field"><label>Icon</label><input id="linkIcon" required placeholder="▶️" /></div>
+          <div class="field"><label>URL</label><input id="linkUrl" required type="url" placeholder="https://" /></div>
+          <div class="field full"><label>Description</label><textarea id="linkDescription" placeholder="What this link is for"></textarea></div>
+        </div>
+        <div class="links-toolbar" style="margin-top:14px;">
+          <button class="primary-btn" type="submit">Save Link</button>
+          <button class="ghost-btn" type="button" data-close-modal="linkModalBackdrop">Cancel</button>
+        </div>
+      </form>
     </div>
-  </main>
+  </div>
+
+  <div class="modal-backdrop" id="noteModalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin:0;" id="noteModalTitle">Add Note</h3>
+          <p class="panel-sub" style="margin:6px 0 0;">Save goals, reminders, and planning notes.</p>
+        </div>
+        <button class="icon-btn" type="button" data-close-modal="noteModalBackdrop">✕</button>
+      </div>
+      <form id="noteForm">
+        <div class="field-grid">
+          <div class="field"><label>Title</label><input id="noteTitle" required /></div>
+          <div class="field"><label>Tag</label><input id="noteTag" placeholder="RS3, idea, media" /></div>
+          <div class="field full"><label>Body</label><textarea id="noteBody" required placeholder="Write your note"></textarea></div>
+        </div>
+        <div class="links-toolbar" style="margin-top:14px;">
+          <button class="primary-btn" type="submit">Save Note</button>
+          <button class="ghost-btn" type="button" data-close-modal="noteModalBackdrop">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="questModalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin:0;">Add Custom Quest</h3>
+          <p class="panel-sub" style="margin:6px 0 0;">Add your own quest entry or goal shortcut.</p>
+        </div>
+        <button class="icon-btn" type="button" data-close-modal="questModalBackdrop">✕</button>
+      </div>
+      <form id="questForm">
+        <div class="field-grid">
+          <div class="field"><label>Name</label><input id="questName" required /></div>
+          <div class="field"><label>Tag</label><input id="questTag" placeholder="story, combat, skilling" /></div>
+          <div class="field full"><label>Description</label><textarea id="questDesc" required></textarea></div>
+          <div class="field full"><label>Wiki Link</label><input id="questLink" type="url" placeholder="https://runescape.wiki/" /></div>
+        </div>
+        <div class="links-toolbar" style="margin-top:14px;">
+          <button class="primary-btn" type="submit">Save Quest</button>
+          <button class="ghost-btn" type="button" data-close-modal="questModalBackdrop">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="promptModalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h3 style="margin:0;">Add AI Prompt</h3>
+          <p class="panel-sub" style="margin:6px 0 0;">Store reusable prompts for RS3 research or planning.</p>
+        </div>
+        <button class="icon-btn" type="button" data-close-modal="promptModalBackdrop">✕</button>
+      </div>
+      <form id="promptForm">
+        <div class="field-grid">
+          <div class="field"><label>Title</label><input id="promptTitle" required /></div>
+          <div class="field"><label>Category</label><input id="promptCategory" placeholder="money making, gear, quests" /></div>
+          <div class="field full"><label>Prompt</label><textarea id="promptBody" required></textarea></div>
+        </div>
+        <div class="links-toolbar" style="margin-top:14px;">
+          <button class="primary-btn" type="submit">Save Prompt</button>
+          <button class="ghost-btn" type="button" data-close-modal="promptModalBackdrop">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="cmd-backdrop" id="commandBackdrop">
+    <div class="cmd">
+      <input class="cmd-input" id="commandInput" placeholder="Type a command or search…" autocomplete="off" />
+      <div class="cmd-results" id="commandResults"></div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap"></div>
 
   <script>
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-
+    const STORAGE_KEY = 'tonys-vault-v3';
     const PLAYER_NAME = 'Ashina Vera';
     const PLAYER_SLUG = 'ashina-vera';
-    const RS3_SKILLS = [
-      'Overall', 'Attack', 'Defence', 'Strength', 'Constitution', 'Ranged', 'Prayer', 'Magic',
-      'Cooking', 'Woodcutting', 'Fletching', 'Fishing', 'Firemaking', 'Crafting', 'Smithing',
-      'Mining', 'Herblore', 'Agility', 'Thieving', 'Slayer', 'Farming', 'Runecrafting', 'Hunter',
-      'Construction', 'Summoning', 'Dungeoneering', 'Divination', 'Invention', 'Archaeology', 'Necromancy'
+    const isFileProtocol = window.location.protocol === 'file:';
+
+    const searchModes = [
+      { id: 'web', label: 'Web', build: q => `https://duckduckgo.com/?q=${encodeURIComponent(q)}` },
+      { id: 'youtube', label: 'YouTube', build: q => `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}` },
+      { id: 'reddit', label: 'Reddit', build: q => `https://www.google.com/search?q=${encodeURIComponent('site:reddit.com ' + q)}` },
+      { id: 'rswiki', label: 'RS Wiki', build: q => `https://runescape.wiki/?search=${encodeURIComponent(q)}` },
+      { id: 'ge', label: 'Item DB', build: q => `https://secure.runescape.com/m=itemdb_rs/results?query=${encodeURIComponent(q)}` },
+      { id: 'ai', label: 'ChatGPT', build: q => `https://chatgpt.com/?q=${encodeURIComponent(q)}` }
     ];
 
-    const isFileProtocol = window.location.protocol === 'file:';
+    const skillIcons = {
+      Attack:'⚔️', Defence:'🛡️', Strength:'💪', Constitution:'❤️', Ranged:'🏹', Prayer:'✨', Magic:'🔮', Cooking:'🍳',
+      Woodcutting:'🪵', Fletching:'🪶', Fishing:'🐟', Firemaking:'🔥', Crafting:'🧵', Smithing:'🔨', Mining:'⛏️',
+      Herblore:'🧪', Agility:'🏃', Thieving:'🕵️', Slayer:'☠️', Farming:'🌾', Runecrafting:'🌀', Hunter:'🪤',
+      Construction:'🏠', Summoning:'🐾', Dungeoneering:'🗝️', Divination:'🔷', Invention:'⚙️', Archaeology:'🏺', Necromancy:'💀', Overall:'⭐'
+    };
+
+    const RS3_SKILLS = [
+      'Overall', 'Attack', 'Defence', 'Strength', 'Constitution', 'Ranged', 'Prayer', 'Magic', 'Cooking', 'Woodcutting',
+      'Fletching', 'Fishing', 'Firemaking', 'Crafting', 'Smithing', 'Mining', 'Herblore', 'Agility', 'Thieving', 'Slayer',
+      'Farming', 'Runecrafting', 'Hunter', 'Construction', 'Summoning', 'Dungeoneering', 'Divination', 'Invention', 'Archaeology', 'Necromancy'
+    ];
 
     const endpoints = {
       hiscore: `https://secure.runescape.com/m=hiscore/index_lite.ws?player=${encodeURIComponent(PLAYER_NAME)}`,
       profile: `https://apps.runescape.com/runemetrics/profile/profile?user=${encodeURIComponent(PLAYER_NAME)}&activities=20`,
       quests: `https://apps.runescape.com/runemetrics/quests?user=${encodeURIComponent(PLAYER_NAME)}`,
-      runePixels: `https://runepixels.com/players/${PLAYER_SLUG}/skills`
+      runePixels: `https://runepixels.com/players/${PLAYER_SLUG}/skills`,
+      geSearch: q => `https://secure.runescape.com/m=itemdb_rs/api/catalogue/items.json?category=1&alpha=${encodeURIComponent((q || 'a')[0].toLowerCase())}&page=1`,
+      geDetail: id => `https://secure.runescape.com/m=itemdb_rs/api/catalogue/detail.json?item=${encodeURIComponent(id)}`,
+      geIcon: id => `https://secure.runescape.com/m=itemdb_rs/obj_big.gif?id=${encodeURIComponent(id)}`
     };
 
-    function resize() {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.floor(window.innerWidth * dpr);
-      canvas.height = Math.floor(window.innerHeight * dpr);
-      canvas.style.width = window.innerWidth + 'px';
-      canvas.style.height = window.innerHeight + 'px';
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-      createParticles();
-    }
+    const defaultState = {
+      theme: 'void-blue',
+      particles: 70,
+      blur: 18,
+      glow: 0.22,
+      scanLines: true,
+      compactMode: false,
+      activeSearchMode: 'web',
+      ambientUrl: 'https://www.youtube.com/watch?v=jfKfPfyJRdk',
+      links: [
+        { id: uid(), title: 'YouTube', category: 'Media', icon: '▶️', url: 'https://www.youtube.com/', description: 'Videos, music, and streams.', uses: 0 },
+        { id: uid(), title: 'FMHY', category: 'Web', icon: '🌐', url: 'https://fmhy.net/', description: 'Large web resource index.', uses: 0 },
+        { id: uid(), title: 'Ores', category: 'RS Wiki', icon: '⛏️', url: 'https://runescape.wiki/w/Ores', description: 'Ore tables and mining resources.', uses: 0 },
+        { id: uid(), title: 'Bars', category: 'RS Wiki', icon: '🔥', url: 'https://runescape.wiki/w/Bars', description: 'Smelting and smithing references.', uses: 0 },
+        { id: uid(), title: 'Money Making Guide', category: 'Guide', icon: '💰', url: 'https://runescape.wiki/w/Money_making_guide', description: 'Profit methods and ideas.', uses: 0 },
+        { id: uid(), title: 'Revolution Bars', category: 'Combat', icon: '⚔️', url: 'https://runescape.wiki/w/Revolution/Bars', description: 'Ability bar setups.', uses: 0 },
+        { id: uid(), title: 'Armour', category: 'Gear', icon: '🛡️', url: 'https://runescape.wiki/w/Armour', description: 'Armour reference and upgrades.', uses: 0 },
+        { id: uid(), title: 'Weapons', category: 'Gear', icon: '🗡️', url: 'https://runescape.wiki/w/Weapons', description: 'Weapon tables and combat gear.', uses: 0 },
+        { id: uid(), title: 'List of Quests', category: 'Questing', icon: '📜', url: 'https://runescape.wiki/w/List_of_quests', description: 'Quest hub and requirements.', uses: 0 },
+        { id: uid(), title: 'ChatGPT', category: 'AI', icon: '🧠', url: 'https://chatgpt.com/', description: 'Your AI workspace.', uses: 0 },
+        { id: uid(), title: 'RuneMetrics', category: 'RS3', icon: '📈', url: 'https://apps.runescape.com/runemetrics/app/search', description: 'Profile search and metrics.', uses: 0 },
+        { id: uid(), title: 'RunePixels', category: 'RS3', icon: '🧩', url: 'https://runepixels.com/players/ashina-vera/skills', description: 'Alternative player profile lookup.', uses: 0 }
+      ],
+      notes: [
+        { id: uid(), title: 'Vault upgrade ideas', tag: 'idea', body: 'Add more GE watch items and keep refining the RS3 dashboard.', pinned: true, createdAt: Date.now() },
+        { id: uid(), title: 'RS3 reminder', tag: 'rs3', body: 'Check smithing margins and current player goals.', pinned: false, createdAt: Date.now() - 100000 }
+      ],
+      quests: [
+        { id: uid(), name: 'Plague\'s End', tag: 'story', description: 'High-value questline goal for Prifddinas access.', link: 'https://runescape.wiki/w/Plague%27s_End', pinned: true },
+        { id: uid(), name: 'The World Wakes', tag: 'story', description: 'Major lore and unlock-focused quest.', link: 'https://runescape.wiki/w/The_World_Wakes', pinned: false },
+        { id: uid(), name: 'Temple at Senntisten', tag: 'combat', description: 'Strong unlock-focused quest progression target.', link: 'https://runescape.wiki/w/Temple_at_Senntisten', pinned: false },
+        { id: uid(), name: 'River of Blood', tag: 'story', description: 'Late-game storyline quest and account progression milestone.', link: 'https://runescape.wiki/w/River_of_Blood', pinned: false }
+      ],
+      prompts: [
+        { id: uid(), title: 'RS3 Money Maker', category: 'money making', body: 'Research current RuneScape 3 prices deeply and find the best realistic money maker for my stats. Include margin, sell speed, risk, and why you picked it.' },
+        { id: uid(), title: 'Quest Planner', category: 'quests', body: 'Build the best RS3 quest progression plan for my account and include useful unlocks first.' }
+      ],
+      recent: [],
+      geRecent: [],
+      geminiApiKey: 'AIzaSyAKKKzSKCpxxEgS9Kt9eExhMHwqZvUVPvA',
+      aiMessages: [
+        { role: 'assistant', content: 'Vault AI ready. Add your Gemini API key locally, then ask about RS3 money making, quests, gear, or general planning.' }
+      ]
+    };
 
-    function createParticles() {
-      const count = 70;
-      particles = Array.from({ length: count }, () => ({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: (Math.random() - 0.5) * 0.25,
-        r: Math.random() * 2 + 0.5,
-        a: Math.random() * 0.6 + 0.15
-      }));
-    }
+    let state = loadState();
+    let editLinkId = null;
+    let editNoteId = null;
+    let selectedCommandIndex = 0;
+    let commandItems = [];
+    let particles = [];
+    let stars = [];
+    const particleCanvas = document.getElementById('particles');
+    const particleCtx = particleCanvas.getContext('2d');
+    const starCanvas = document.getElementById('starfield');
+    const starCtx = starCanvas.getContext('2d');
 
-    function step() {
-      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
-        if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(180,222,255,${p.a})`;
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
+    function uid() { return Math.random().toString(36).slice(2, 10); }
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+        if (!parsed) return structuredClone(defaultState);
+        return deepMerge(structuredClone(defaultState), parsed);
+      } catch {
+        return structuredClone(defaultState);
       }
-      requestAnimationFrame(step);
     }
-
+    function deepMerge(target, source) {
+      for (const key in source) {
+        if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key]) && target[key]) deepMerge(target[key], source[key]);
+        else target[key] = source[key];
+      }
+      return target;
+    }
+    function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+    function $(id) { return document.getElementById(id); }
     function formatNumber(value) {
       const num = Number(value);
       if (!Number.isFinite(num)) return '—';
       return new Intl.NumberFormat().format(num);
     }
-
     function formatCompact(value) {
       const num = Number(value);
       if (!Number.isFinite(num)) return '—';
       return new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(num);
     }
+    function sanitize(text = '') {
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+    function toast(message) {
+      const node = document.createElement('div');
+      node.className = 'toast';
+      node.textContent = message;
+      $('toastWrap').appendChild(node);
+      setTimeout(() => node.remove(), 2800);
+    }
+    function openExternal(url) {
+      if (!url) return;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+    function addRecent(type, title, meta, url = '') {
+      state.recent.unshift({ id: uid(), type, title, meta, url, time: Date.now() });
+      state.recent = state.recent.slice(0, 12);
+      saveState();
+      renderRecent();
+      renderHero();
+    }
+
+    function applyVisualState() {
+      document.documentElement.dataset.theme = state.theme;
+      document.documentElement.style.setProperty('--blur', `${state.blur}px`);
+      document.documentElement.style.setProperty('--glow', String(state.glow));
+      document.body.classList.toggle('compact-mode', !!state.compactMode);
+      $('scanLine').style.display = state.scanLines ? 'block' : 'none';
+      $('currentThemeBadge').textContent = state.theme.replace(/-/g, ' ').toUpperCase();
+      renderSettings();
+      resizeCanvases();
+    }
+
+    function renderSearchModes() {
+      $('searchModeTabs').innerHTML = searchModes.map(mode => `
+        <button class="tab-btn ${state.activeSearchMode === mode.id ? 'active' : ''}" type="button" data-mode="${mode.id}">${mode.label}</button>
+      `).join('');
+      $('searchModeTabs').querySelectorAll('[data-mode]').forEach(btn => btn.addEventListener('click', () => {
+        state.activeSearchMode = btn.dataset.mode;
+        saveState();
+        renderSearchModes();
+      }));
+    }
+
+    function renderLinks() {
+      const grid = $('linksGrid');
+      grid.innerHTML = state.links.map((link, index) => `
+        <article class="link-card" draggable="true" data-id="${link.id}" data-index="${index}">
+          <div class="link-card-top">
+            <div class="icon-badge">${sanitize(link.icon)}</div>
+            <div class="pill">${sanitize(link.category)}</div>
+          </div>
+          <h4>${sanitize(link.title)}</h4>
+          <p>${sanitize(link.description)}</p>
+          <div class="thumb"></div>
+          <div class="card-actions">
+            <button class="mini-icon-btn" type="button" data-edit-link="${link.id}" title="Edit">✎</button>
+            <button class="mini-icon-btn" type="button" data-delete-link="${link.id}" title="Delete">🗑</button>
+          </div>
+        </article>
+      `).join('');
+
+      grid.querySelectorAll('.link-card').forEach(card => {
+        const id = card.dataset.id;
+        const link = state.links.find(item => item.id === id);
+        card.addEventListener('click', e => {
+          if (e.target.closest('[data-edit-link]') || e.target.closest('[data-delete-link]')) return;
+          e.preventDefault();
+          if (!link) return;
+          link.uses = (link.uses || 0) + 1;
+          saveState();
+          addRecent('Link', link.title, link.category, link.url);
+          renderLinks();
+          renderHero();
+          openExternal(link.url);
+        });
+
+        card.addEventListener('dragstart', () => card.classList.add('dragging'));
+        card.addEventListener('dragend', () => {
+          card.classList.remove('dragging');
+          saveState();
+          renderLinks();
+        });
+        card.addEventListener('dragover', e => e.preventDefault());
+        card.addEventListener('drop', e => {
+          e.preventDefault();
+          const dragging = grid.querySelector('.dragging');
+          if (!dragging || dragging === card) return;
+          const from = Number(dragging.dataset.index);
+          const to = Number(card.dataset.index);
+          const moved = state.links.splice(from, 1)[0];
+          state.links.splice(to, 0, moved);
+          saveState();
+          renderLinks();
+        });
+      });
+
+      grid.querySelectorAll('[data-edit-link]').forEach(btn => btn.addEventListener('click', e => {
+        e.stopPropagation();
+        openLinkModal(btn.dataset.editLink);
+      }));
+      grid.querySelectorAll('[data-delete-link]').forEach(btn => btn.addEventListener('click', e => {
+        e.stopPropagation();
+        state.links = state.links.filter(link => link.id !== btn.dataset.deleteLink);
+        saveState();
+        renderLinks();
+        renderHero();
+        toast('Link removed');
+      }));
+    }
+
+    function renderHero() {
+      const topLink = [...state.links].sort((a, b) => (b.uses || 0) - (a.uses || 0))[0];
+      $('mostUsedLink').textContent = topLink?.title || 'No data yet';
+      $('mostUsedLinkMeta').textContent = topLink ? `${formatNumber(topLink.uses || 0)} launches · ${topLink.category}` : 'Use a few links to build stats';
+      const pinnedThing = state.notes.find(note => note.pinned) || state.quests.find(quest => quest.pinned);
+      $('heroPinnedGoal').textContent = pinnedThing ? (pinnedThing.title || pinnedThing.name) : 'None yet';
+      const lines = [
+        'SYSTEM ONLINE', 'VAULT READY', 'RS3 DATA LINKED', 'SEARCH GRID ACTIVE', 'PERSONAL HUB SYNCHRONIZED'
+      ];
+      const minuteSlot = Math.floor(Date.now() / 5000) % lines.length;
+      $('rotatingStatus').textContent = lines[minuteSlot];
+      $('todayHeadline').textContent = state.notes.find(n => n.pinned)?.title || 'Ready';
+      $('todaySub').textContent = state.notes.find(n => n.pinned)?.body?.slice(0, 88) || 'Booting your favorite tools and saved modules.';
+      renderTodayKpis();
+    }
+
+    function renderTodayKpis() {
+      const notesCount = state.notes.length;
+      const linksCount = state.links.length;
+      const recentCount = state.recent.length;
+      const pinnedCount = state.notes.filter(n => n.pinned).length + state.quests.filter(q => q.pinned).length;
+      $('todayKpis').innerHTML = [
+        { label: 'Quick Links', value: formatNumber(linksCount), sub: 'Custom launch cards' },
+        { label: 'Saved Notes', value: formatNumber(notesCount), sub: 'Goals and reminders' },
+        { label: 'Pinned Items', value: formatNumber(pinnedCount), sub: 'High-priority items' },
+        { label: 'Recent Events', value: formatNumber(recentCount), sub: 'Recent vault actions' }
+      ].map(item => `
+        <div class="kpi"><div class="label">${item.label}</div><div class="value">${item.value}</div><div class="mini-sub">${item.sub}</div></div>
+      `).join('');
+    }
+
+    function renderRecent() {
+      const modules = [];
+      const topLinks = [...state.links].sort((a,b)=> (b.uses||0)-(a.uses||0)).slice(0,3);
+      modules.push({ title: 'Most used links', body: topLinks.length ? topLinks.map(link => `${link.title} · ${formatNumber(link.uses || 0)} launches`).join(' • ') : 'No usage data yet' });
+      modules.push({ title: 'Recent actions', body: state.recent.slice(0,4).map(item => `${item.title} · ${item.meta}`).join(' • ') || 'Nothing yet' });
+      modules.push({ title: 'Recent GE items', body: state.geRecent.slice(0,4).map(item => item.name).join(' • ') || 'No GE lookups yet' });
+      $('recentModules').innerHTML = modules.map(mod => `
+        <div class="recent-item"><strong>${sanitize(mod.title)}</strong><div class="list-meta" style="margin-top:8px;">${sanitize(mod.body)}</div></div>
+      `).join('');
+    }
+
+    function renderNotes() {
+      const filter = $('noteFilterInput').value.trim().toLowerCase();
+      const notes = state.notes.filter(note => `${note.title} ${note.tag} ${note.body}`.toLowerCase().includes(filter));
+      $('notesList').innerHTML = notes.length ? notes.map(note => `
+        <div class="note-item ${note.pinned ? 'pinned' : ''}">
+          <div class="panel-header" style="margin-bottom:8px;">
+            <div>
+              <strong>${sanitize(note.title)}</strong>
+              <div class="list-meta">${sanitize(note.tag || 'general')} · ${new Date(note.createdAt).toLocaleString()}</div>
+            </div>
+            <div class="links-toolbar">
+              <button class="tiny-btn" data-toggle-note-pin="${note.id}" type="button">${note.pinned ? 'Unpin' : 'Pin'}</button>
+              <button class="tiny-btn" data-edit-note="${note.id}" type="button">Edit</button>
+              <button class="tiny-btn" data-delete-note="${note.id}" type="button">Delete</button>
+            </div>
+          </div>
+          <div class="soft-text">${sanitize(note.body)}</div>
+        </div>
+      `).join('') : '<div class="soft-text">No matching notes.</div>';
+
+      $('notesList').querySelectorAll('[data-toggle-note-pin]').forEach(btn => btn.addEventListener('click', () => {
+        const note = state.notes.find(n => n.id === btn.dataset.toggleNotePin);
+        if (!note) return;
+        note.pinned = !note.pinned;
+        saveState();
+        renderNotes();
+        renderHero();
+        toast(note.pinned ? 'Note pinned' : 'Note unpinned');
+      }));
+      $('notesList').querySelectorAll('[data-delete-note]').forEach(btn => btn.addEventListener('click', () => {
+        state.notes = state.notes.filter(n => n.id !== btn.dataset.deleteNote);
+        saveState();
+        renderNotes();
+        renderHero();
+        toast('Note deleted');
+      }));
+      $('notesList').querySelectorAll('[data-edit-note]').forEach(btn => btn.addEventListener('click', () => openNoteModal(btn.dataset.editNote)));
+    }
+
+    function renderQuests() {
+      const search = $('questSearchInput').value.trim().toLowerCase();
+      const filter = $('questFilter').value;
+      let quests = state.quests.filter(quest => `${quest.name} ${quest.tag} ${quest.description}`.toLowerCase().includes(search));
+      if (filter !== 'all') {
+        quests = quests.filter(quest => filter === 'pinned' ? quest.pinned : (quest.tag || '').toLowerCase().includes(filter));
+      }
+      $('questList').innerHTML = quests.length ? quests.map(quest => `
+        <div class="quest-item ${quest.pinned ? 'pinned' : ''}">
+          <div class="panel-header" style="margin-bottom:8px;">
+            <div>
+              <strong>${sanitize(quest.name)}</strong>
+              <div class="list-meta">${sanitize(quest.tag || 'general')}</div>
+            </div>
+            <div class="links-toolbar">
+              <button class="tiny-btn" data-pin-quest="${quest.id}" type="button">${quest.pinned ? 'Unpin' : 'Pin'}</button>
+              ${quest.link ? `<a class="tiny-btn" href="${sanitize(quest.link)}" target="_blank" rel="noreferrer">Wiki</a>` : ''}
+              <button class="tiny-btn" data-delete-quest="${quest.id}" type="button">Delete</button>
+            </div>
+          </div>
+          <div class="soft-text">${sanitize(quest.description)}</div>
+        </div>
+      `).join('') : '<div class="soft-text">No quests matched your search.</div>';
+
+      $('questList').querySelectorAll('[data-pin-quest]').forEach(btn => btn.addEventListener('click', () => {
+        const quest = state.quests.find(q => q.id === btn.dataset.pinQuest);
+        if (!quest) return;
+        quest.pinned = !quest.pinned;
+        saveState();
+        renderQuests();
+        renderHero();
+      }));
+      $('questList').querySelectorAll('[data-delete-quest]').forEach(btn => btn.addEventListener('click', () => {
+        state.quests = state.quests.filter(q => q.id !== btn.dataset.deleteQuest);
+        saveState();
+        renderQuests();
+        renderHero();
+      }));
+    }
+
+    function renderPrompts() {
+      $('promptList').innerHTML = state.prompts.map(prompt => `
+        <div class="prompt-item">
+          <div class="panel-header" style="margin-bottom:8px;">
+            <div>
+              <strong>${sanitize(prompt.title)}</strong>
+              <div class="list-meta">${sanitize(prompt.category || 'general')}</div>
+            </div>
+            <div class="links-toolbar">
+              <button class="tiny-btn" data-copy-prompt="${prompt.id}" type="button">Copy</button>
+              <button class="tiny-btn" data-run-prompt="${prompt.id}" type="button">Use</button>
+            </div>
+          </div>
+          <div class="soft-text">${sanitize(prompt.body)}</div>
+        </div>
+      `).join('');
+      $('promptList').querySelectorAll('[data-copy-prompt]').forEach(btn => btn.addEventListener('click', async () => {
+        const prompt = state.prompts.find(p => p.id === btn.dataset.copyPrompt);
+        if (!prompt) return;
+        await navigator.clipboard.writeText(prompt.body).catch(() => {});
+        toast('Prompt copied');
+      }));
+      $('promptList').querySelectorAll('[data-run-prompt]').forEach(btn => btn.addEventListener('click', () => {
+        const prompt = state.prompts.find(p => p.id === btn.dataset.runPrompt);
+        if (!prompt) return;
+        $('aiPromptInput').value = prompt.body;
+        location.hash = '#aiSection';
+        toast('Prompt loaded into AI console');
+      }));
+    }
+
+    function renderAiMessages() {
+      const box = $('aiChatMessages');
+      const messages = state.aiMessages || [];
+      box.innerHTML = messages.map(message => `
+        <div class="${message.role === 'user' ? 'note-item' : 'quest-item'}" style="white-space:pre-wrap;">
+          <div class="panel-header" style="margin-bottom:8px;">
+            <strong>${message.role === 'user' ? 'You' : 'Gemini'}</strong>
+            <span class="pill">${message.role}</span>
+          </div>
+          <div class="soft-text" style="color:var(--text);">${sanitize(message.content)}</div>
+        </div>
+      `).join('');
+      $('geminiStatusBadge').textContent = state.geminiApiKey ? 'Connected' : 'Disconnected';
+      $('geminiApiKeyInput').value = state.geminiApiKey || '';
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function buildAiContext() {
+      const pinnedNote = state.notes.find(note => note.pinned);
+      const pinnedQuest = state.quests.find(quest => quest.pinned);
+      const topLinks = [...state.links].sort((a,b)=> (b.uses||0)-(a.uses||0)).slice(0,5).map(link => `${link.title} (${link.category})`).join(', ');
+      return [
+        'You are the assistant inside TONY\'S VAULT, a futuristic personal dashboard.',
+        'Prefer concise, practical answers with actionable guidance.',
+        `Focused player/dashboard context: RuneScape 3 player name is ${PLAYER_NAME}.`,
+        pinnedNote ? `Pinned note: ${pinnedNote.title} — ${pinnedNote.body}` : 'No pinned note.',
+        pinnedQuest ? `Pinned quest: ${pinnedQuest.name} — ${pinnedQuest.description}` : 'No pinned quest.',
+        topLinks ? `Frequently used links: ${topLinks}.` : 'No frequent links yet.'
+      ].join('
+');
+    }
+
+    async function callGemini(userPrompt, includeContext = true) {
+      const apiKey = (state.geminiApiKey || '').trim();
+      if (!apiKey) {
+        toast('Add a Gemini API key first');
+        return;
+      }
+      const model = 'gemini-1.5-flash';
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+      const contextPrefix = includeContext ? `${buildAiContext()}
+
+User request:
+` : '';
+      const contents = [{ role: 'user', parts: [{ text: `${contextPrefix}${userPrompt}` }] }];
+      state.aiMessages.push({ role: 'user', content: userPrompt });
+      state.aiMessages.push({ role: 'assistant', content: 'Thinking…' });
+      saveState();
+      renderAiMessages();
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents })
+        });
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || `HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        const text = data?.candidates?.[0]?.content?.parts?.map(part => part.text || '').join('
+').trim() || 'No response returned.';
+        state.aiMessages[state.aiMessages.length - 1] = { role: 'assistant', content: text };
+        saveState();
+        renderAiMessages();
+        addRecent('AI Chat', userPrompt.slice(0, 42), 'Gemini response generated');
+      } catch (error) {
+        state.aiMessages[state.aiMessages.length - 1] = { role: 'assistant', content: `Gemini request failed. ${error.message || 'Unknown error.'}` };
+        saveState();
+        renderAiMessages();
+        toast('Gemini request failed');
+      }
+    }
+
+    function renderSettings() {
+      $('settingsList').innerHTML = `
+        <div class="list-row"><div><strong>Theme</strong><div class="list-meta">Switch between futuristic visual modes.</div></div>
+          <select id="themeSelect" class="ghost-btn" style="min-height:44px; padding:0 14px; background:rgba(255,255,255,0.05);">
+            <option value="void-blue">Void Blue</option>
+            <option value="neon-gold">Neon Gold</option>
+            <option value="rs3-dark">RS3 Dark</option>
+            <option value="cyber-purple">Cyber Purple</option>
+            <option value="glass-white">Glass White</option>
+          </select>
+        </div>
+        <div class="list-row"><div><strong>Particle intensity</strong><div class="list-meta">How many animated particles render in the background.</div></div>
+          <input id="particleRange" type="range" min="10" max="140" step="5" value="${state.particles}" />
+        </div>
+        <div class="list-row"><div><strong>Blur amount</strong><div class="list-meta">Glassmorphism strength across panels.</div></div>
+          <input id="blurRange" type="range" min="0" max="30" step="1" value="${state.blur}" />
+        </div>
+        <div class="list-row"><div><strong>Glow intensity</strong><div class="list-meta">Ambient bloom and background radiance.</div></div>
+          <input id="glowRange" type="range" min="0.05" max="0.4" step="0.01" value="${state.glow}" />
+        </div>
+        <div class="list-row"><div><strong>Scan lines</strong><div class="list-meta">CRT-style sci-fi overlay.</div></div>
+          <button id="scanToggle" class="tiny-btn" type="button">${state.scanLines ? 'Enabled' : 'Disabled'}</button>
+        </div>
+        <div class="list-row"><div><strong>Compact mode</strong><div class="list-meta">Tighter spacing for denser information.</div></div>
+          <button id="compactToggle" class="tiny-btn" type="button">${state.compactMode ? 'Enabled' : 'Disabled'}</button>
+        </div>
+      `;
+      $('themeSelect').value = state.theme;
+      $('themeSelect').addEventListener('change', e => { state.theme = e.target.value; saveState(); applyVisualState(); toast('Theme updated'); });
+      $('particleRange').addEventListener('input', e => { state.particles = Number(e.target.value); saveState(); resizeCanvases(); });
+      $('blurRange').addEventListener('input', e => { state.blur = Number(e.target.value); saveState(); applyVisualState(); });
+      $('glowRange').addEventListener('input', e => { state.glow = Number(e.target.value); saveState(); applyVisualState(); });
+      $('scanToggle').addEventListener('click', () => { state.scanLines = !state.scanLines; saveState(); applyVisualState(); });
+      $('compactToggle').addEventListener('click', () => { state.compactMode = !state.compactMode; saveState(); applyVisualState(); });
+    }
+
+    function openModal(id) { $(id).classList.add('show'); }
+    function closeModal(id) { $(id).classList.remove('show'); }
+
+    function openLinkModal(id = null) {
+      editLinkId = id;
+      const link = state.links.find(item => item.id === id);
+      $('linkModalTitle').textContent = link ? 'Edit Link' : 'Add Link';
+      $('linkTitle').value = link?.title || '';
+      $('linkCategory').value = link?.category || '';
+      $('linkIcon').value = link?.icon || '✨';
+      $('linkUrl').value = link?.url || '';
+      $('linkDescription').value = link?.description || '';
+      openModal('linkModalBackdrop');
+    }
+
+    function openNoteModal(id = null) {
+      editNoteId = id;
+      const note = state.notes.find(item => item.id === id);
+      $('noteModalTitle').textContent = note ? 'Edit Note' : 'Add Note';
+      $('noteTitle').value = note?.title || '';
+      $('noteTag').value = note?.tag || '';
+      $('noteBody').value = note?.body || '';
+      openModal('noteModalBackdrop');
+    }
+
+    function renderCommandPalette(query = '') {
+      const q = query.trim().toLowerCase();
+      const commands = [
+        { label: 'Open Search', desc: 'Focus the main search bar', action: () => $('mainSearchInput').focus() },
+        { label: 'Add Quick Link', desc: 'Create a new launch card', action: () => openLinkModal() },
+        { label: 'Add Note', desc: 'Save a quick note or goal', action: () => openNoteModal() },
+        { label: 'Go to RS3 Dashboard', desc: 'Scroll to player stats', action: () => location.hash = '#statsSection' },
+        { label: 'Go to GE Lookup', desc: 'Scroll to Grand Exchange search', action: () => location.hash = '#geSection' },
+        { label: 'Go to Quest Hub', desc: 'Scroll to quest tools', action: () => location.hash = '#questsSection' },
+        { label: 'Toggle Theme', desc: 'Cycle visual theme', action: cycleTheme },
+        { label: 'Open Ambient Link', desc: 'Launch saved audio link', action: () => openExternal(state.ambientUrl) }
+      ];
+      const linkCommands = state.links.map(link => ({ label: `Open ${link.title}`, desc: `${link.category} · ${link.description}`, action: () => openExternal(link.url) }));
+      commandItems = [...commands, ...linkCommands].filter(item => `${item.label} ${item.desc}`.toLowerCase().includes(q));
+      selectedCommandIndex = Math.min(selectedCommandIndex, Math.max(commandItems.length - 1, 0));
+      $('commandResults').innerHTML = commandItems.length ? commandItems.map((item, index) => `
+        <button class="cmd-item ${index === selectedCommandIndex ? 'active' : ''}" type="button" data-cmd-index="${index}">
+          <span class="cmd-label">${sanitize(item.label)}</span>
+          <span class="cmd-desc">${sanitize(item.desc)}</span>
+        </button>
+      `).join('') : '<div class="cmd-item"><span class="cmd-label">No results</span><span class="cmd-desc">Try a different search or command.</span></div>';
+      $('commandResults').querySelectorAll('[data-cmd-index]').forEach(btn => btn.addEventListener('click', () => {
+        const item = commandItems[Number(btn.dataset.cmdIndex)];
+        if (item) { closeCommandPalette(); item.action(); }
+      }));
+    }
+
+    function openCommandPalette(seed = '') {
+      $('commandBackdrop').classList.add('show');
+      $('commandInput').value = seed;
+      renderCommandPalette(seed);
+      setTimeout(() => $('commandInput').focus(), 10);
+    }
+    function closeCommandPalette() { $('commandBackdrop').classList.remove('show'); }
+    function cycleTheme() {
+      const themes = ['void-blue','neon-gold','rs3-dark','cyber-purple','glass-white'];
+      const currentIndex = themes.indexOf(state.theme);
+      state.theme = themes[(currentIndex + 1) % themes.length];
+      saveState();
+      applyVisualState();
+      renderHero();
+      toast('Theme cycled');
+    }
+
+    async function copyServerCommand() {
+      const command = 'py -m http.server 5500';
+      try {
+        await navigator.clipboard.writeText(command);
+        $('copyServerCmd').textContent = 'Copied: py -m http.server 5500';
+        toast('Local server command copied');
+      } catch {
+        $('copyServerCmd').textContent = 'Run: py -m http.server 5500';
+      }
+    }
+
+    function updateDateTime() {
+      const now = new Date();
+      $('liveClock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      $('liveDate').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+
+    async function loadWeather() {
+      if (!navigator.geolocation) return;
+      try {
+        const position = await new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 6000 }));
+        const { latitude, longitude } = position.coords;
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&current=temperature_2m,weather_code&temperature_unit=fahrenheit`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const current = data.current || {};
+        $('weatherTemp').textContent = Number.isFinite(current.temperature_2m) ? `${Math.round(current.temperature_2m)}°F` : '—';
+        $('weatherSummary').textContent = weatherCodeToText(current.weather_code);
+      } catch {
+        $('weatherTemp').textContent = '—';
+        $('weatherSummary').textContent = 'Allow location for local weather';
+      }
+    }
+    function weatherCodeToText(code) {
+      const map = { 0:'Clear skies', 1:'Mostly clear', 2:'Partly cloudy', 3:'Cloudy', 45:'Foggy', 48:'Rime fog', 51:'Light drizzle', 61:'Light rain', 63:'Rain', 65:'Heavy rain', 71:'Light snow', 80:'Rain showers', 95:'Thunderstorm' };
+      return map[code] || 'Conditions updating';
+    }
+
+    function resizeCanvases() {
+      const dpr = window.devicePixelRatio || 1;
+      [particleCanvas, starCanvas].forEach(canvas => {
+        canvas.width = Math.floor(window.innerWidth * dpr);
+        canvas.height = Math.floor(window.innerHeight * dpr);
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
+      });
+      particleCtx.setTransform(1,0,0,1,0,0);
+      starCtx.setTransform(1,0,0,1,0,0);
+      particleCtx.scale(dpr, dpr);
+      starCtx.scale(dpr, dpr);
+      createParticles();
+      createStars();
+    }
+    function createParticles() {
+      particles = Array.from({ length: state.particles }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
+        r: Math.random() * 2.2 + 0.6,
+        a: Math.random() * 0.6 + 0.14
+      }));
+    }
+    function createStars() {
+      stars = Array.from({ length: 90 }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.2 + 0.3,
+        a: Math.random() * 0.5 + 0.2,
+        speed: Math.random() * 0.08 + 0.02
+      }));
+    }
+    function animateBg() {
+      particleCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      starCtx.clearRect(0,0,window.innerWidth,window.innerHeight);
+      for (const s of stars) {
+        s.y += s.speed;
+        if (s.y > window.innerHeight) s.y = -4;
+        starCtx.beginPath();
+        starCtx.fillStyle = `rgba(255,255,255,${s.a})`;
+        starCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        starCtx.fill();
+      }
+      for (const p of particles) {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
+        if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
+        particleCtx.beginPath();
+        particleCtx.fillStyle = `rgba(180,222,255,${p.a})`;
+        particleCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        particleCtx.fill();
+      }
+      requestAnimationFrame(animateBg);
+    }
+
+    function observeReveals() {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
 
     function calculateCombat(skills) {
-      const getLevel = (name) => Number(skills[name]?.level || 1);
+      const getLevel = name => Number(skills[name]?.level || 1);
       const attack = getLevel('Attack');
       const strength = getLevel('Strength');
       const defence = getLevel('Defence');
@@ -831,7 +2270,6 @@
       const prayer = getLevel('Prayer');
       const summoning = getLevel('Summoning');
       const necromancy = getLevel('Necromancy');
-
       const melee = attack + strength;
       const ranger = ranged * 2;
       const mage = magic * 2;
@@ -847,109 +2285,99 @@
         `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
         `https://corsproxy.io/?${encodeURIComponent(url)}`
       ];
-
       let lastError = null;
-
       for (const candidate of variants) {
         try {
-          const response = await fetch(candidate, {
-            headers: {
-              Accept: parser === 'json' ? 'application/json,text/plain,*/*' : 'text/plain,*/*'
-            }
-          });
+          const response = await fetch(candidate, { headers: { Accept: parser === 'json' ? 'application/json,text/plain,*/*' : 'text/plain,*/*' } });
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           return parser === 'json' ? await response.json() : await response.text();
-        } catch (error) {
-          lastError = error;
-        }
+        } catch (error) { lastError = error; }
       }
-
       throw lastError || new Error('Failed to fetch remote data');
     }
 
     function parseHiscoreCsv(csvText) {
       const safeText = String(csvText || '').trim();
       if (!safeText) return {};
-
       const lines = safeText.split(/\r?\n/).filter(Boolean);
       const mapped = {};
-
       RS3_SKILLS.forEach((skillName, index) => {
         const row = (lines[index] || '').split(',');
-        mapped[skillName] = {
-          name: skillName,
-          rank: Number(row[0] ?? -1),
-          level: Number(row[1] ?? 0),
-          xp: Number(row[2] ?? 0)
-        };
+        mapped[skillName] = { name: skillName, rank: Number(row[0] ?? -1), level: Number(row[1] ?? 0), xp: Number(row[2] ?? 0) };
       });
-
       return mapped;
     }
 
-    function renderSkills(skills) {
-      const skillsList = document.getElementById('skillsList');
-      const visibleSkills = Object.values(skills)
-        .filter((skill) => skill && skill.name !== 'Overall')
-        .sort((a, b) => b.level - a.level || b.xp - a.xp)
-        .slice(0, 8);
-
-      if (!visibleSkills.length) {
-        skillsList.innerHTML = '<p class="stats-status">No skill data available.</p>';
-        return;
+    function xpToNextLevel(level, xp) {
+      if (!Number.isFinite(level) || !Number.isFinite(xp)) return null;
+      if (level >= 120) return 0;
+      let points = 0;
+      const xpTable = [0];
+      for (let lvl = 1; lvl <= 120; lvl++) {
+        points += Math.floor(lvl + 300 * Math.pow(2, lvl / 7));
+        xpTable[lvl] = Math.floor(points / 4);
       }
+      return Math.max(0, (xpTable[level + 1] || xp) - xp);
+    }
 
-      skillsList.innerHTML = visibleSkills.map((skill) => {
+    function renderSkills(skills) {
+      const skillsList = $('skillsList');
+      const visibleSkills = Object.values(skills)
+        .filter(skill => skill && skill.name !== 'Overall')
+        .sort((a, b) => b.level - a.level || b.xp - a.xp)
+        .slice(0, 10);
+      skillsList.innerHTML = visibleSkills.length ? visibleSkills.map(skill => {
         const width = Math.max(3, Math.min(100, (Number(skill.level || 0) / 120) * 100));
+        const next = xpToNextLevel(Number(skill.level), Number(skill.xp));
         return `
           <div class="skill-row">
+            <div class="skill-icon">${skillIcons[skill.name] || '•'}</div>
             <div>
               <div class="skill-name">${skill.name}</div>
               <div class="skill-level">Level ${formatNumber(skill.level)}</div>
             </div>
-            <div class="skill-bar" aria-hidden="true">
-              <div class="skill-bar-fill" style="width:${width}%"></div>
-            </div>
-            <div class="skill-xp">${formatCompact(skill.xp)} XP</div>
+            <div class="skill-bar" aria-hidden="true"><div class="skill-bar-fill" style="width:${width}%"></div></div>
+            <div class="skill-xp">${formatCompact(skill.xp)} XP · ${next === 0 ? '120 cap' : `${formatCompact(next)} to next`}</div>
           </div>
         `;
-      }).join('');
+      }).join('') : '<p class="stats-status">No skill data available.</p>';
     }
 
-    function setText(id, value) {
-      const node = document.getElementById(id);
-      if (node) node.textContent = value;
+    function renderActivity(profile) {
+      const activities = Array.isArray(profile?.activities) ? profile.activities : [];
+      $('activityList').innerHTML = activities.length ? activities.slice(0, 6).map(item => `
+        <div class="activity-item"><strong>${sanitize(item.text || 'Activity')}</strong><div class="list-meta" style="margin-top:6px;">${sanitize(item.date || 'Unknown date')}</div></div>
+      `).join('') : '<div class="soft-text">No recent public RuneMetrics activity available.</div>';
     }
 
-    async function copyServerCommand() {
-      const command = 'py -m http.server 5500';
-      try {
-        await navigator.clipboard.writeText(command);
-        setText('copyServerCmd', 'Copied: py -m http.server 5500');
-      } catch (error) {
-        setText('copyServerCmd', 'Run: py -m http.server 5500');
-      }
+    function renderCombatBreakdown(skills) {
+      const melee = Number(skills.Attack?.level || 1) + Number(skills.Strength?.level || 1);
+      const ranged = Number(skills.Ranged?.level || 1) * 2;
+      const magic = Number(skills.Magic?.level || 1) * 2;
+      const necro = Number(skills.Necromancy?.level || 1) * 2;
+      const highest = [
+        ['Melee', melee], ['Ranged', ranged], ['Magic', magic], ['Necromancy', necro]
+      ].sort((a,b)=>b[1]-a[1])[0]?.[0] || 'Unknown';
+      $('combatStyle').textContent = highest;
+      $('combatBreakdown').innerHTML = [
+        ['Melee Power', melee], ['Ranged Power', ranged], ['Magic Power', magic], ['Necromancy Power', necro]
+      ].map(([label, value]) => `<div class="note-item"><strong>${label}</strong><div class="list-meta" style="margin-top:6px;">${formatNumber(value)}</div></div>`).join('');
     }
 
     async function loadPlayerStats() {
-      const statusEl = document.getElementById('statsStatus');
-      const footnoteEl = document.getElementById('statsFootnote');
-      const localServerHelp = document.getElementById('localServerHelp');
-
       if (isFileProtocol) {
-        localServerHelp.style.display = 'flex';
-        statusEl.innerHTML = '<strong>Live stats are blocked from a local file.</strong> Open this page through <code>http://localhost</code> and the stats section will work.';
-        footnoteEl.innerHTML = 'Quick fix on Windows: open Command Prompt in this folder, run <code>py -m http.server 5500</code>, then open <code>http://localhost:5500/</code>.';
-        setText('overallLevel', 'Needs localhost');
-        setText('overallXp', 'Needs localhost');
-        setText('overallRank', 'Needs localhost');
-        setText('combatLevel', 'Needs localhost');
-        setText('questCount', 'Needs localhost');
-        setText('activityCount', 'Needs localhost');
-        document.getElementById('skillsList').innerHTML = '<p class="stats-status">Live skill data is disabled on <code>file://</code> pages by browser security rules.</p>';
+        $('localServerHelp').hidden = false;
+        $('statsStatus').innerHTML = '<strong>Live stats are blocked from a local file.</strong> Open this page through localhost and the RS3 dashboard will work.';
+        $('statsFootnote').innerHTML = 'Quick fix on Windows: open Command Prompt in this folder, run <code>py -m http.server 5500</code>, then open <code>http://localhost:5500/</code>.';
+        ['overallLevel','overallXp','overallRank','combatLevel','questCount','activityCount','combatStyle','xpToGoal','overallRingValue'].forEach(id => $(id).textContent = 'Needs localhost');
+        $('skillsList').innerHTML = '<div class="soft-text">Live skill data is disabled on file pages by browser security rules.</div>';
+        $('activityList').innerHTML = '<div class="soft-text">RuneMetrics activity is unavailable on file pages.</div>';
+        $('combatBreakdown').innerHTML = '<div class="soft-text">Combat breakdown will appear after a live hiscore lookup.</div>';
         return;
       }
 
+      $('skillsList').innerHTML = Array.from({ length: 6 }, () => `<div class="skeleton" style="height:42px;"></div>`).join('');
+      $('activityList').innerHTML = Array.from({ length: 4 }, () => `<div class="skeleton" style="height:64px;"></div>`).join('');
       try {
         const [hiscoreText, profileData, questsData] = await Promise.allSettled([
           fetchWithFallback(endpoints.hiscore, 'text'),
@@ -957,88 +2385,300 @@
           fetchWithFallback(endpoints.quests, 'json')
         ]);
 
-        if (hiscoreText.status !== 'fulfilled') {
-          throw hiscoreText.reason || new Error('Hiscore request failed');
-        }
+        if (hiscoreText.status !== 'fulfilled') throw hiscoreText.reason || new Error('Hiscore request failed');
 
         const skills = parseHiscoreCsv(hiscoreText.value);
         const overall = skills.Overall || { level: 0, xp: 0, rank: -1 };
         const combatLevel = calculateCombat(skills);
-
-        setText('overallLevel', formatNumber(overall.level));
-        setText('overallXp', formatNumber(overall.xp));
-        setText('overallRank', overall.rank > 0 ? formatNumber(overall.rank) : 'Unranked');
-        setText('combatLevel', formatNumber(combatLevel));
+        $('overallLevel').textContent = formatNumber(overall.level);
+        $('overallXp').textContent = formatNumber(overall.xp);
+        $('overallRank').textContent = overall.rank > 0 ? formatNumber(overall.rank) : 'Unranked';
+        $('combatLevel').textContent = formatNumber(combatLevel);
+        $('overallRingValue').textContent = formatNumber(overall.level);
+        const progressDeg = Math.min(360, (Number(overall.level || 0) / 3000) * 360);
+        $('overallRing').style.background = `conic-gradient(var(--accent) 0deg, var(--accent-2) ${progressDeg}deg, rgba(255,255,255,0.08) ${progressDeg}deg)`;
+        const topSkill = Object.values(skills).filter(s => s.name !== 'Overall').sort((a,b)=>b.level-a.level || b.xp-a.xp)[0];
+        $('xpToGoal').textContent = topSkill ? `${formatCompact(xpToNextLevel(topSkill.level, topSkill.xp) || 0)} (${topSkill.name})` : '—';
 
         if (profileData.status === 'fulfilled') {
           const profile = profileData.value || {};
           const activities = Array.isArray(profile.activities) ? profile.activities.length : 0;
-          setText('activityCount', formatNumber(activities));
+          $('activityCount').textContent = formatNumber(activities);
+          renderActivity(profile);
         } else {
-          setText('activityCount', 'Unavailable');
+          $('activityCount').textContent = 'Unavailable';
+          renderActivity(null);
         }
 
         if (questsData.status === 'fulfilled') {
           const questsPayload = questsData.value;
-          const quests = Array.isArray(questsPayload?.quests)
-            ? questsPayload.quests
-            : Array.isArray(questsPayload)
-              ? questsPayload
-              : [];
-          const completeCount = quests.filter((quest) => {
+          const quests = Array.isArray(questsPayload?.quests) ? questsPayload.quests : Array.isArray(questsPayload) ? questsPayload : [];
+          const completeCount = quests.filter(quest => {
             const status = String(quest.status ?? quest.questStatus ?? '').toLowerCase();
             return status.includes('complete') || status === 'completed';
           }).length;
-          setText('questCount', completeCount ? formatNumber(completeCount) : (quests.length ? '0' : 'Unavailable'));
-        } else {
-          setText('questCount', 'Unavailable');
-        }
+          $('questCount').textContent = completeCount ? formatNumber(completeCount) : (quests.length ? '0' : 'Unavailable');
+        } else $('questCount').textContent = 'Unavailable';
 
         renderSkills(skills);
-        statusEl.innerHTML = `<strong>Live data loaded.</strong> Showing official RS3 hiscores for ${PLAYER_NAME}${profileData.status === 'fulfilled' ? ' plus RuneMetrics activity data' : ''}.`;
-        footnoteEl.textContent = profileData.status === 'fulfilled' || questsData.status === 'fulfilled'
+        renderCombatBreakdown(skills);
+        $('statsStatus').innerHTML = `<strong>Live data loaded.</strong> Showing official RS3 hiscores for ${PLAYER_NAME}${profileData.status === 'fulfilled' ? ' plus RuneMetrics activity data' : ''}.`;
+        $('statsFootnote').textContent = profileData.status === 'fulfilled' || questsData.status === 'fulfilled'
           ? 'Stats loaded. If some RuneMetrics fields are missing, that part of the profile may be private or blocked.'
           : 'Hiscores loaded successfully. RuneMetrics profile or quest data was not available, so those fields were left unavailable.';
-      } catch (error) {
-        statusEl.innerHTML = `<strong>Could not load live stats automatically.</strong> Open RunePixels for Ashina Vera, or refresh again later.`;
-        footnoteEl.textContent = 'The page tried direct requests first and then proxy fallbacks. Remote APIs may still block some browser requests from a local file.';
-        setText('overallLevel', 'Unavailable');
-        setText('overallXp', 'Unavailable');
-        setText('overallRank', 'Unavailable');
-        setText('combatLevel', 'Unavailable');
-        setText('questCount', 'Unavailable');
-        setText('activityCount', 'Unavailable');
-        document.getElementById('skillsList').innerHTML = '<p class="stats-status">Live skill data could not be loaded right now.</p>';
+      } catch {
+        $('statsStatus').innerHTML = '<strong>Could not load live stats automatically.</strong> Open RunePixels for Ashina Vera, or refresh again later.';
+        $('statsFootnote').textContent = 'The page tried direct requests first and then proxy fallbacks. Remote APIs may still block some browser requests.';
+        ['overallLevel','overallXp','overallRank','combatLevel','questCount','activityCount','combatStyle','xpToGoal','overallRingValue'].forEach(id => $(id).textContent = 'Unavailable');
+        $('skillsList').innerHTML = '<div class="soft-text">Live skill data could not be loaded right now.</div>';
+        $('activityList').innerHTML = '<div class="soft-text">Activity feed unavailable.</div>';
+        $('combatBreakdown').innerHTML = '<div class="soft-text">Combat breakdown unavailable.</div>';
       }
+    }
+
+    async function searchGE(query) {
+      const cleaned = String(query || '').trim();
+      if (!cleaned) return toast('Enter an item name first');
+      $('geItemName').textContent = 'Searching…';
+      $('geItemMeta').textContent = 'Looking up item database results.';
+      $('geDesc').textContent = 'Trying live Grand Exchange lookup with fallbacks.';
+      try {
+        const searchData = await fetchWithFallback(endpoints.geSearch(cleaned), 'json');
+        const items = Array.isArray(searchData?.items) ? searchData.items : [];
+        const normalized = cleaned.toLowerCase();
+        const item = items.find(entry => String(entry.name || '').toLowerCase().includes(normalized)) || items[0];
+        if (!item?.id) throw new Error('Item not found');
+        const detailData = await fetchWithFallback(endpoints.geDetail(item.id), 'json');
+        const detail = detailData?.item || item;
+        const wikiLink = `https://runescape.wiki/?search=${encodeURIComponent(detail.name || cleaned)}`;
+        $('geThumb').innerHTML = `<img src="${sanitize(endpoints.geIcon(item.id))}" alt="${sanitize(detail.name || cleaned)}" style="max-width:100%; max-height:100%;" onerror="this.parentNode.textContent='💠'">`;
+        $('geItemName').textContent = detail.name || cleaned;
+        $('geItemMeta').textContent = detail.type ? `${detail.type}${detail.members ? ' · Members' : ' · F2P/Unknown'}` : 'Item database result';
+        $('geCurrentPrice').textContent = detail.current?.price || detail.price || 'Unavailable';
+        $('geTodayChange').textContent = detail.today?.price || 'Unavailable';
+        $('ge30').textContent = detail.day30?.change || detail.day30?.trend || 'Unavailable';
+        $('ge90').textContent = detail.day90?.change || detail.day90?.trend || 'Unavailable';
+        $('geDesc').textContent = detail.description || 'No description provided by item database.';
+        $('geWikiLink').href = wikiLink;
+        $('geDbLink').href = `https://secure.runescape.com/m=itemdb_rs/viewitem?obj=${encodeURIComponent(item.id)}`;
+        $('geCopyBtn').onclick = async () => {
+          await navigator.clipboard.writeText(detail.name || cleaned).catch(() => {});
+          toast('Item name copied');
+        };
+        const recentItem = { id: item.id, name: detail.name || cleaned, time: Date.now() };
+        state.geRecent = [recentItem, ...state.geRecent.filter(entry => entry.id !== item.id)].slice(0, 8);
+        saveState();
+        renderGERecent();
+        addRecent('GE Search', detail.name || cleaned, 'Item lookup', $('geDbLink').href);
+      } catch {
+        const wikiLink = `https://runescape.wiki/?search=${encodeURIComponent(cleaned)}`;
+        const dbLink = `https://secure.runescape.com/m=itemdb_rs/results?query=${encodeURIComponent(cleaned)}`;
+        $('geThumb').textContent = '💠';
+        $('geItemName').textContent = cleaned;
+        $('geItemMeta').textContent = 'Live price lookup unavailable right now';
+        $('geCurrentPrice').textContent = 'Unavailable';
+        $('geTodayChange').textContent = 'Unavailable';
+        $('ge30').textContent = 'Unavailable';
+        $('ge90').textContent = 'Unavailable';
+        $('geWikiLink').href = wikiLink;
+        $('geDbLink').href = dbLink;
+        $('geDesc').textContent = 'Could not load live item details. Use the quick links to open the wiki or the official item database results.';
+        addRecent('GE Search', cleaned, 'Fallback links only', dbLink);
+        renderGERecent();
+      }
+    }
+
+    function renderGERecent() {
+      $('geRecentList').innerHTML = state.geRecent.length ? state.geRecent.map(item => `
+        <div class="list-row"><div><strong>${sanitize(item.name)}</strong><div class="list-meta">${new Date(item.time).toLocaleString()}</div></div><button class="tiny-btn" data-ge-recent="${sanitize(item.name)}" type="button">Load</button></div>
+      `).join('') : '<div class="soft-text">Recent GE lookups will appear here.</div>';
+      $('geRecentList').querySelectorAll('[data-ge-recent]').forEach(btn => btn.addEventListener('click', () => {
+        $('geSearchInput').value = btn.dataset.geRecent;
+        searchGE(btn.dataset.geRecent);
+      }));
+    }
+
+    function bindBaseEvents() {
+      $('mainSearchForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const query = $('mainSearchInput').value.trim();
+        if (!query) return;
+        const mode = searchModes.find(item => item.id === state.activeSearchMode) || searchModes[0];
+        addRecent('Search', query, mode.label, mode.build(query));
+        openExternal(mode.build(query));
+      });
+      $('smartActionBtn').addEventListener('click', () => openCommandPalette($('mainSearchInput').value));
+      $('commandOpenBtn').addEventListener('click', () => openCommandPalette());
+      $('settingsOpenBtn').addEventListener('click', () => location.hash = '#settingsSection');
+      $('addLinkBtn').addEventListener('click', () => openLinkModal());
+      $('addNoteBtn').addEventListener('click', () => openNoteModal());
+      $('resetLinksBtn').addEventListener('click', () => {
+        state.links = structuredClone(defaultState.links);
+        saveState();
+        renderLinks();
+        renderHero();
+        toast('Default links restored');
+      });
+      $('addQuestBtn').addEventListener('click', () => openModal('questModalBackdrop'));
+      $('addPromptBtn').addEventListener('click', () => openModal('promptModalBackdrop'));
+      $('saveGeminiKeyBtn').addEventListener('click', () => {
+        state.geminiApiKey = $('geminiApiKeyInput').value.trim() || 'AIzaSyAKKKzSKCpxxEgS9Kt9eExhMHwqZvUVPvA';
+        saveState();
+        renderAiMessages();
+        toast(state.geminiApiKey ? 'Gemini key saved locally' : 'Gemini key cleared');
+      });
+      $('removeGeminiKeyBtn').addEventListener('click', () => {
+        state.geminiApiKey = 'AIzaSyAKKKzSKCpxxEgS9Kt9eExhMHwqZvUVPvA';
+        saveState();
+        renderAiMessages();
+        toast('Runtime key cleared back to embedded default');
+      });
+      $('sendAiBtn').addEventListener('click', () => {
+        const prompt = $('aiPromptInput').value.trim();
+        if (!prompt) return toast('Type a message for Gemini');
+        callGemini(prompt, true);
+      });
+      $('useStatsContextBtn').addEventListener('click', () => {
+        const base = buildAiContext();
+        $('aiPromptInput').value = `${base}
+
+Help me based on the vault context above.`;
+        toast('RS3 context inserted');
+      });
+      $('clearAiChatBtn').addEventListener('click', () => {
+        state.aiMessages = [{ role: 'assistant', content: 'Vault AI chat cleared. Ask Gemini something new.' }];
+        saveState();
+        renderAiMessages();
+      });
+      document.querySelectorAll('[data-ai-fill]').forEach(btn => btn.addEventListener('click', () => {
+        $('aiPromptInput').value = btn.dataset.aiFill || '';
+        $('aiPromptInput').focus();
+      }));
+      $('ambientSaveBtn').addEventListener('click', () => {
+        state.ambientUrl = $('ambientInput').value.trim() || defaultState.ambientUrl;
+        saveState();
+        toast('Ambient link saved');
+      });
+      $('ambientLaunchBtn').addEventListener('click', () => {
+        addRecent('Media', 'Ambient Link', 'Media corner', state.ambientUrl);
+        openExternal(state.ambientUrl);
+      });
+      $('ambientInput').value = state.ambientUrl;
+      $('noteFilterInput').addEventListener('input', renderNotes);
+      $('questSearchInput').addEventListener('input', renderQuests);
+      $('questFilter').addEventListener('change', renderQuests);
+      $('copyServerCmd').addEventListener('click', copyServerCommand);
+      $('geSearchBtn').addEventListener('click', () => searchGE($('geSearchInput').value));
+      $('geSearchInput').addEventListener('keydown', e => { if (e.key === 'Enter') searchGE($('geSearchInput').value); });
+      document.querySelectorAll('[data-open-url]').forEach(btn => btn.addEventListener('click', () => openExternal(btn.dataset.openUrl)));
+      document.querySelectorAll('[data-close-modal]').forEach(btn => btn.addEventListener('click', () => closeModal(btn.dataset.closeModal)));
+      document.querySelectorAll('.modal-backdrop').forEach(backdrop => backdrop.addEventListener('click', e => { if (e.target === backdrop) backdrop.classList.remove('show'); }));
+      document.querySelectorAll('[data-nav]').forEach(link => link.addEventListener('click', () => {
+        document.querySelectorAll('[data-nav]').forEach(n => n.classList.remove('active'));
+        link.classList.add('active');
+      }));
+
+      $('linkForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const payload = {
+          id: editLinkId || uid(),
+          title: $('linkTitle').value.trim(),
+          category: $('linkCategory').value.trim(),
+          icon: $('linkIcon').value.trim() || '✨',
+          url: $('linkUrl').value.trim(),
+          description: $('linkDescription').value.trim(),
+          uses: state.links.find(link => link.id === editLinkId)?.uses || 0
+        };
+        if (editLinkId) state.links = state.links.map(link => link.id === editLinkId ? payload : link);
+        else state.links.unshift(payload);
+        saveState(); renderLinks(); renderHero(); closeModal('linkModalBackdrop'); toast(editLinkId ? 'Link updated' : 'Link added');
+      });
+
+      $('noteForm').addEventListener('submit', e => {
+        e.preventDefault();
+        const payload = {
+          id: editNoteId || uid(),
+          title: $('noteTitle').value.trim(),
+          tag: $('noteTag').value.trim(),
+          body: $('noteBody').value.trim(),
+          pinned: state.notes.find(note => note.id === editNoteId)?.pinned || false,
+          createdAt: state.notes.find(note => note.id === editNoteId)?.createdAt || Date.now()
+        };
+        if (editNoteId) state.notes = state.notes.map(note => note.id === editNoteId ? payload : note);
+        else state.notes.unshift(payload);
+        saveState(); renderNotes(); renderHero(); closeModal('noteModalBackdrop'); toast(editNoteId ? 'Note updated' : 'Note added');
+      });
+
+      $('questForm').addEventListener('submit', e => {
+        e.preventDefault();
+        state.quests.unshift({ id: uid(), name: $('questName').value.trim(), tag: $('questTag').value.trim(), description: $('questDesc').value.trim(), link: $('questLink').value.trim(), pinned: false });
+        saveState(); renderQuests(); closeModal('questModalBackdrop'); toast('Quest added'); e.target.reset();
+      });
+
+      $('promptForm').addEventListener('submit', e => {
+        e.preventDefault();
+        state.prompts.unshift({ id: uid(), title: $('promptTitle').value.trim(), category: $('promptCategory').value.trim(), body: $('promptBody').value.trim() });
+        saveState(); renderPrompts(); closeModal('promptModalBackdrop'); toast('Prompt added'); e.target.reset();
+      });
+
+      $('commandBackdrop').addEventListener('click', e => { if (e.target === $('commandBackdrop')) closeCommandPalette(); });
+      $('commandInput').addEventListener('input', e => { selectedCommandIndex = 0; renderCommandPalette(e.target.value); });
+      $('commandInput').addEventListener('keydown', e => {
+        if (e.key === 'Escape') return closeCommandPalette();
+        if (e.key === 'ArrowDown') { e.preventDefault(); selectedCommandIndex = Math.min(selectedCommandIndex + 1, Math.max(commandItems.length - 1, 0)); renderCommandPalette($('commandInput').value); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); selectedCommandIndex = Math.max(selectedCommandIndex - 1, 0); renderCommandPalette($('commandInput').value); }
+        if (e.key === 'Enter') { e.preventDefault(); const item = commandItems[selectedCommandIndex]; if (item) { closeCommandPalette(); item.action(); } }
+      });
+
+      window.addEventListener('keydown', e => {
+        const tag = document.activeElement?.tagName?.toLowerCase();
+        const typing = ['input','textarea'].includes(tag);
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openCommandPalette(); }
+        if (!typing && e.key === '/') { e.preventDefault(); openCommandPalette(); }
+      });
+      window.addEventListener('resize', resizeCanvases);
     }
 
     function runSelfTests() {
       console.assert(Array.isArray(RS3_SKILLS) && RS3_SKILLS.length >= 30, 'RS3 skills list should be present');
       console.assert(typeof calculateCombat === 'function', 'Combat calculator should exist');
       console.assert(typeof parseHiscoreCsv === 'function', 'Hiscore parser should exist');
-      console.assert(document.getElementById('playerStatsSection'), 'Stats section should exist');
+      console.assert(document.getElementById('statsSection'), 'Stats section should exist');
       console.assert(document.getElementById('skillsList'), 'Skills list container should exist');
       console.assert(typeof isFileProtocol === 'boolean', 'Protocol detection should exist');
-
       const fakeCsv = '1,2898,500000000\r\n2,99,13034431\n3,99,13034431';
       const parsed = parseHiscoreCsv(fakeCsv);
       console.assert(parsed.Overall.level === 2898, 'Parser should read Windows/Unix line breaks correctly');
       console.assert(parsed.Attack.level === 99, 'Parser should map Attack row correctly');
-
-      const fakeSkills = {
-        Attack: { level: 99 }, Strength: { level: 99 }, Defence: { level: 99 }, Constitution: { level: 99 },
-        Magic: { level: 99 }, Ranged: { level: 99 }, Prayer: { level: 99 }, Summoning: { level: 99 }, Necromancy: { level: 99 }
-      };
+      const fakeSkills = { Attack: { level: 99 }, Strength: { level: 99 }, Defence: { level: 99 }, Constitution: { level: 99 }, Magic: { level: 99 }, Ranged: { level: 99 }, Prayer: { level: 99 }, Summoning: { level: 99 }, Necromancy: { level: 99 } };
       console.assert(Number.isFinite(calculateCombat(fakeSkills)), 'Combat level calculation should return a number');
+      console.assert(typeof xpToNextLevel === 'function', 'XP helper should exist');
     }
 
-    document.getElementById('copyServerCmd')?.addEventListener('click', copyServerCommand);
+    function init() {
+      applyVisualState();
+      renderSearchModes();
+      renderLinks();
+      renderHero();
+      renderRecent();
+      renderNotes();
+      renderQuests();
+      renderPrompts();
+      renderAiMessages();
+      renderGERecent();
+      bindBaseEvents();
+      resizeCanvases();
+      animateBg();
+      observeReveals();
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+      setInterval(renderHero, 5000);
+      loadWeather();
+      loadPlayerStats();
+      runSelfTests();
+    }
 
-    window.addEventListener('resize', resize);
-    resize();
-    step();
-    runSelfTests();
-    loadPlayerStats();
+    init();
   </script>
 </body>
 </html>
