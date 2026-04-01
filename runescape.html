@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Vault — RuneScape</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg: #050505;
+      --bg-2: #0c0c0c;
+      --panel: rgba(17, 17, 17, 0.78);
+      --panel-strong: rgba(10, 10, 10, 0.92);
+      --gold: #d4af37;
+      --gold-soft: #f1da92;
+      --gold-dim: rgba(212, 175, 55, 0.16);
+      --line: rgba(255, 230, 160, 0.14);
+      --line-strong: rgba(255, 230, 160, 0.22);
+      --text: #f8f3e8;
+      --muted: rgba(248, 243, 232, 0.66);
+      --danger: #d16d53;
+      --good: #d4af37;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+      --glow: 0 0 36px rgba(212, 175, 55, 0.16), 0 0 90px rgba(212, 175, 55, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --content-width: min(1450px, calc(100vw - 48px));
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 50% -8%, rgba(212,175,55,0.18), transparent 28%),
+        radial-gradient(circle at 10% 24%, rgba(212,175,55,0.06), transparent 22%),
+        radial-gradient(circle at 90% 34%, rgba(212,175,55,0.05), transparent 24%),
+        linear-gradient(180deg, #090909 0%, #040404 100%);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black 42%, transparent 90%);
+      opacity: 0.34;
+    }
+
+    #particles {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.82;
+      z-index: 0;
+    }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(88px);
+      pointer-events: none;
+      opacity: 0.22;
+      mix-blend-mode: screen;
+      z-index: 0;
+      animation: drift 24s ease-in-out infinite alternate;
+    }
+
+    .orb.left {
+      width: 280px;
+      height: 280px;
+      left: -60px;
+      top: 10%;
+      background: radial-gradient(circle, rgba(212,175,55,0.55), transparent 72%);
+    }
+
+    .orb.right {
+      width: 320px;
+      height: 320px;
+      right: -80px;
+      bottom: 12%;
+      background: radial-gradient(circle, rgba(212,175,55,0.32), transparent 72%);
+      animation-duration: 28s;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(40px, -28px, 0) scale(1.08); }
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: var(--content-width);
+      margin: 0 auto;
+      padding: 28px 0 36px;
+    }
+
+    .vault-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(20,20,20,0.82), rgba(8,8,8,0.9));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.03), var(--glow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .vault-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255,235,180,0.28), rgba(212,175,55,0.03), rgba(255,235,180,0.1));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .top-decoration {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 160px;
+      pointer-events: none;
+    }
+
+    .top-decoration::before,
+    .top-decoration::after {
+      content: "";
+      position: absolute;
+      top: 54px;
+      width: 24%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.65), transparent);
+      box-shadow: 0 0 24px rgba(212,175,55,0.25);
+    }
+
+    .top-decoration::before { left: 2%; }
+    .top-decoration::after { right: 2%; }
+
+    .hero {
+      text-align: center;
+      padding-top: 8px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      color: rgba(240,217,138,0.86);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5em;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.1rem, 5vw, 5.1rem);
+      line-height: 0.96;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      text-shadow: 0 0 20px rgba(212,175,55,0.08);
+    }
+
+    .title .gold {
+      color: var(--gold-soft);
+      text-shadow: 0 0 16px rgba(212,175,55,0.18), 0 0 46px rgba(212,175,55,0.12);
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: auto auto 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .chip,
+    .wiki-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 18px;
+      border-radius: 18px;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(22,22,22,0.9), rgba(11,11,11,0.86));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .chip:hover,
+    .wiki-link:hover {
+      transform: translateY(-2px);
+      border-color: var(--line-strong);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.3), 0 0 20px rgba(212,175,55,0.11);
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, #f3dc94, #c89b22);
+      color: #0d0b06;
+      font-weight: 800;
+      border-color: transparent;
+      box-shadow: 0 12px 28px rgba(212,175,55,0.24), inset 0 1px 0 rgba(255,255,255,0.42);
+    }
+
+    .toolbar-spacer {
+      justify-self: end;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .column {
+      display: grid;
+      gap: 20px;
+      align-content: start;
+    }
+
+    .panel {
+      border-radius: 26px;
+      padding: 18px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .panel-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .panel-kicker {
+      color: rgba(240,217,138,0.76);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+    }
+
+    .panel-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .muted-badge {
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,230,160,0.12);
+      color: rgba(240,217,138,0.9);
+      background: rgba(255,230,160,0.04);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      white-space: nowrap;
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .summary-card {
+      border-radius: 18px;
+      padding: 14px 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .summary-card .label {
+      display: block;
+      color: rgba(240,217,138,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.66rem;
+      margin-bottom: 8px;
+    }
+
+    .summary-card .value {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      max-height: 650px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .skill-grid::-webkit-scrollbar,
+    .quest-results::-webkit-scrollbar { width: 10px; }
+    .skill-grid::-webkit-scrollbar-thumb,
+    .quest-results::-webkit-scrollbar-thumb {
+      background: rgba(212,175,55,0.2);
+      border-radius: 999px;
+    }
+
+    .skill-card {
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.045);
+      background: linear-gradient(180deg, rgba(255,255,255,0.028), rgba(255,255,255,0.01));
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .skill-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(240,217,138,0.16);
+      box-shadow: 0 14px 26px rgba(0,0,0,0.24), 0 0 18px rgba(212,175,55,0.08);
+    }
+
+    .skill-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .skill-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .skill-level {
+      color: var(--gold-soft);
+      font-weight: 800;
+      font-size: 1rem;
+    }
+
+    .skill-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+    }
+
+    .progress {
+      width: 100%;
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .progress > span {
+      display: block;
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(212,175,55,0.58), rgba(241,218,146,1));
+      box-shadow: 0 0 16px rgba(212,175,55,0.22);
+    }
+
+    .progress-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .search-bar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .input,
+    .button,
+    .select {
+      min-height: 54px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,230,160,0.12);
+      background: linear-gradient(180deg, rgba(22,22,22,0.92), rgba(10,10,10,0.86));
+      color: var(--text);
+      padding: 0 16px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .input:focus,
+    .select:focus {
+      border-color: rgba(240,217,138,0.24);
+      box-shadow: 0 0 0 3px rgba(212,175,55,0.08);
+    }
+
+    .button {
+      cursor: pointer;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #0d0b06;
+      background: linear-gradient(135deg, #f3dc94, #c89b22);
+      border-color: transparent;
+      box-shadow: 0 12px 26px rgba(212,175,55,0.22), inset 0 1px 0 rgba(255,255,255,0.42);
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    .sub-controls {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .item-summary {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .metric {
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .metric .label {
+      display: block;
+      font-size: 0.66rem;
+      color: rgba(240,217,138,0.72);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 8px;
+    }
+
+    .metric .value {
+      font-size: 1.06rem;
+      font-weight: 700;
+    }
+
+    .chart-wrap {
+      min-height: 310px;
+      border-radius: 22px;
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .quest-results {
+      display: grid;
+      gap: 12px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 4px;
+      margin-bottom: 12px;
+      transition: opacity 0.28s ease, max-height 0.28s ease, margin-bottom 0.28s ease;
+    }
+
+    .quest-results.hidden {
+      opacity: 0;
+      max-height: 0;
+      margin-bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .quest-card {
+      border-radius: 18px;
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.045);
+      cursor: pointer;
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .quest-card:hover,
+    .quest-card.active {
+      transform: translateY(-2px);
+      border-color: rgba(240,217,138,0.18);
+      box-shadow: 0 14px 28px rgba(0,0,0,0.24), 0 0 18px rgba(212,175,55,0.08);
+    }
+
+    .quest-card h4 {
+      font-size: 1rem;
+      margin-bottom: 6px;
+    }
+
+    .quest-card p {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .quest-detail {
+      border-radius: 22px;
+      padding: 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.045);
+      min-height: 240px;
+    }
+
+    .quest-detail h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      margin-bottom: 6px;
+      letter-spacing: 0.04em;
+    }
+
+    .quest-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .quest-pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,230,160,0.12);
+      color: rgba(240,217,138,0.9);
+      background: rgba(255,230,160,0.04);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .quest-section {
+      margin-top: 12px;
+    }
+
+    .quest-section h5 {
+      color: rgba(240,217,138,0.9);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.74rem;
+      margin-bottom: 8px;
+    }
+
+    .quest-section p,
+    .quest-section ul {
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 0.94rem;
+    }
+
+    .quest-section ul {
+      padding-left: 18px;
+    }
+
+    .quest-section li + li { margin-top: 6px; }
+
+    .loading,
+    .empty,
+    .error {
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px dashed rgba(255,230,160,0.14);
+      background: rgba(255,255,255,0.015);
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .loading-spinner {
+      display: grid;
+      place-items: center;
+      min-height: 240px;
+      gap: 14px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .spinner-ring {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: 2px solid rgba(240,217,138,0.14);
+      border-top-color: var(--gold-soft);
+      box-shadow: 0 0 20px rgba(212,175,55,0.12);
+      animation: spin 0.85s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .error { color: #f0b8a8; border-color: rgba(209,109,83,0.24); }
+
+    .signature {
+      position: fixed;
+      right: 22px;
+      bottom: 14px;
+      color: rgba(255,255,255,0.18);
+      font-size: 0.74rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @media (max-width: 1200px) {
+      .main-grid { grid-template-columns: 1fr; }
+      .skill-grid { max-height: none; }
+    }
+
+    @media (max-width: 900px) {
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .toolbar-spacer { grid-column: 1 / -1; justify-self: start; }
+      .summary-row,
+      .item-summary { grid-template-columns: repeat(2, 1fr); }
+      .skill-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .page { width: min(100vw - 20px, 100%); padding-top: 20px; }
+      .toolbar,
+      .search-bar,
+      .sub-controls,
+      .summary-row,
+      .item-summary { grid-template-columns: 1fr; }
+      .panel-title { font-size: 1.75rem; }
+      .title { font-size: clamp(2.5rem, 12vw, 4rem); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <div class="orb left"></div>
+  <div class="orb right"></div>
+
+  <main class="page">
+    <div class="top-decoration"></div>
+
+    <section class="hero">
+      <div class="eyebrow">Enter The Internet</div>
+      <h1 class="title">THE <span class="gold">VAULT</span> — RS</h1>
+    </section>
+
+    <section class="toolbar">
+      <button class="chip active" id="tabBurletta" data-player="BurlettaBoi">BurlettaBoi</button>
+      <button class="chip" id="tabAshina" data-player="Ashina Vera">Ashina Vera</button>
+      <div class="toolbar-spacer">
+        <a class="wiki-link" href="https://runescape.wiki" target="_blank" rel="noreferrer">RuneScape Wiki ↗</a>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <div class="column">
+        <section class="panel vault-card" id="playerPanel">
+          <div class="panel-head">
+            <div class="panel-title-wrap">
+              <span class="panel-kicker">Character Overview</span>
+              <h2 class="panel-title" id="playerName">BurlettaBoi</h2>
+            </div>
+            <div class="muted-badge" id="playerStatus">Loading stats…</div>
+          </div>
+
+          <div class="summary-row" id="playerSummary">
+            <div class="summary-card"><span class="label">Overall Level</span><span class="value">—</span></div>
+            <div class="summary-card"><span class="label">Overall XP</span><span class="value">—</span></div>
+            <div class="summary-card"><span class="label">Highest Skill</span><span class="value">—</span></div>
+            <div class="summary-card"><span class="label">Combat Style</span><span class="value">—</span></div>
+          </div>
+
+          <div class="skill-grid" id="skillsGrid">
+            <div class="loading">Loading skills…</div>
+          </div>
+        </section>
+      </div>
+
+      <div class="column">
+        <section class="panel vault-card">
+          <div class="panel-head">
+            <div class="panel-title-wrap">
+              <span class="panel-kicker">Grand Exchange</span>
+              <h2 class="panel-title">Item Exchange</h2>
+            </div>
+            <div class="muted-badge">Price + history</div>
+          </div>
+
+          <div class="search-bar">
+            <input class="input" id="itemInput" type="text" placeholder="Search an item, e.g. primal bar, bond, elder rune bar…" />
+            <button class="button" id="itemSearchBtn">Search</button>
+          </div>
+
+          <div class="sub-controls">
+            <select class="select" id="chartRange">
+              <option value="30">Last 30 data points</option>
+              <option value="60">Last 60 data points</option>
+              <option value="90" selected>Last 90 data points</option>
+              <option value="180">Last 180 data points</option>
+            </select>
+            <div class="muted-badge" id="itemState">Ready</div>
+          </div>
+
+          <div class="item-summary" id="itemSummary">
+            <div class="metric"><span class="label">Item</span><span class="value">—</span></div>
+            <div class="metric"><span class="label">Latest Price</span><span class="value">—</span></div>
+            <div class="metric"><span class="label">Volume</span><span class="value">—</span></div>
+            <div class="metric"><span class="label">Trend</span><span class="value">—</span></div>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="priceChart"></canvas>
+          </div>
+        </section>
+
+        <section class="panel vault-card">
+          <div class="panel-head">
+            <div class="panel-title-wrap">
+              <span class="panel-kicker">Quest Hub</span>
+              <h2 class="panel-title">Quest Search</h2>
+            </div>
+            <div class="muted-badge">Requirements + start</div>
+          </div>
+
+          <div class="search-bar">
+            <input class="input" id="questInput" type="text" placeholder="Search a quest…" />
+            <button class="button" id="questSearchBtn">Find</button>
+          </div>
+
+          <div class="quest-results" id="questResults">
+            <div class="empty">Search a quest to load results from the wiki.</div>
+          </div>
+
+          <div class="quest-detail" id="questDetail">
+            <div class="empty">Pick a quest result and its start point, requirements, and items will appear here.</div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="signature">The Vault</div>
+
+  <script>
+    const SKILLS = [
+      'Overall', 'Attack', 'Defence', 'Strength', 'Constitution', 'Ranged', 'Prayer', 'Magic', 'Cooking', 'Woodcutting',
+      'Fletching', 'Fishing', 'Firemaking', 'Crafting', 'Smithing', 'Mining', 'Herblore', 'Agility', 'Thieving', 'Slayer',
+      'Farming', 'Runecrafting', 'Hunter', 'Construction', 'Summoning', 'Dungeoneering', 'Divination', 'Invention', 'Archaeology', 'Necromancy'
+    ];
+
+    const PLAYERS = ['BurlettaBoi', 'Ashina Vera'];
+    const playerCache = new Map();
+    let activePlayer = 'BurlettaBoi';
+    let priceChart = null;
+
+    const playerNameEl = document.getElementById('playerName');
+    const playerStatusEl = document.getElementById('playerStatus');
+    const playerSummaryEl = document.getElementById('playerSummary');
+    const skillsGridEl = document.getElementById('skillsGrid');
+    const questResultsEl = document.getElementById('questResults');
+    const questDetailEl = document.getElementById('questDetail');
+    const itemStateEl = document.getElementById('itemState');
+
+    function formatNumber(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      return new Intl.NumberFormat().format(value);
+    }
+
+    function abbreviate(value) {
+      if (value >= 1_000_000_000) return `${(value / 1_000_000_000).toFixed(2)}b`;
+      if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(2)}m`;
+      if (value >= 1_000) return `${(value / 1_000).toFixed(1)}k`;
+      return String(value);
+    }
+
+    function skillXpForLevel(level) {
+      if (level <= 1) return 0;
+      let points = 0;
+      for (let lvl = 1; lvl < level; lvl++) {
+        points += Math.floor(lvl + 300 * Math.pow(2, lvl / 7));
+      }
+      return Math.floor(points / 4);
+    }
+
+    function parseHiscoreCSV(text) {
+      const lines = text.trim().split(/\r?\n/).filter(Boolean);
+      return SKILLS.map((skill, index) => {
+        const [rank = '-1', level = '0', xp = '0'] = (lines[index] || '-1,0,0').split(',');
+        return {
+          skill,
+          rank: Number(rank),
+          level: Number(level),
+          xp: Number(xp),
+        };
+      });
+    }
+
+    async function fetchTextViaProxy(url) {
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+      const response = await fetch(proxyUrl, { cache: 'no-store' });
+      if (!response.ok) throw new Error('Request failed');
+      return response.text();
+    }
+
+    async function fetchJsonViaProxy(url) {
+      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+      const response = await fetch(proxyUrl, { cache: 'no-store' });
+      if (!response.ok) throw new Error('Request failed');
+      return response.json();
+    }
+
+    function calculateCombatStyle(skills) {
+      const find = (name) => skills.find(s => s.skill === name)?.level || 1;
+      const attack = find('Attack');
+      const strength = find('Strength');
+      const ranged = find('Ranged');
+      const magic = find('Magic');
+      const necromancy = find('Necromancy');
+
+      const melee = attack + strength;
+      const range = ranged * 2;
+      const mage = magic * 2;
+      const necro = necromancy * 2;
+
+      const best = Math.max(melee, range, mage, necro);
+      if (best === necro) return 'Necromancy';
+      if (best === mage) return 'Magic';
+      if (best === range) return 'Ranged';
+      return 'Melee';
+    }
+
+    function renderPlayerSummary(skills) {
+      const overall = skills[0];
+      const pureSkills = skills.slice(1);
+      const highest = pureSkills.reduce((best, current) => current.level > best.level ? current : best, pureSkills[0]);
+      const html = [
+        ['Overall Level', formatNumber(overall.level)],
+        ['Overall XP', abbreviate(overall.xp)],
+        ['Highest Skill', `${highest.skill} ${highest.level}`],
+        ['Combat Style', calculateCombatStyle(skills)]
+      ].map(([label, value]) => `
+        <div class="summary-card">
+          <span class="label">${label}</span>
+          <span class="value">${value}</span>
+        </div>
+      `).join('');
+      playerSummaryEl.innerHTML = html;
+    }
+
+    function renderSkills(skills) {
+      const pureSkills = skills.slice(1);
+      skillsGridEl.innerHTML = pureSkills.map(skill => {
+        const effectiveLevel = Math.max(skill.level, 1);
+        const maxLevel = effectiveLevel >= 120 ? 120 : 99;
+        const currentFloorXp = skillXpForLevel(effectiveLevel);
+        const nextLevel = Math.min(effectiveLevel + 1, maxLevel);
+        const nextLevelXp = skillXpForLevel(nextLevel);
+        const progressDenominator = Math.max(nextLevelXp - currentFloorXp, 1);
+        const progressNumerator = Math.max(skill.xp - currentFloorXp, 0);
+        const progressPct = Math.max(0, Math.min(100, (progressNumerator / progressDenominator) * 100));
+        const remainingXp = Math.max(nextLevelXp - skill.xp, 0);
+
+        return `
+          <article class="skill-card">
+            <div class="skill-top">
+              <div class="skill-name">${skill.skill}</div>
+              <div class="skill-level">Lv ${skill.level}</div>
+            </div>
+            <div class="skill-meta">
+              <span>XP ${formatNumber(skill.xp)}</span>
+              <span>Rank ${skill.rank > 0 ? formatNumber(skill.rank) : '—'}</span>
+            </div>
+            <div class="progress"><span style="width:${progressPct}%"></span></div>
+            <div class="progress-caption">
+              <span>${progressPct.toFixed(1)}% to next</span>
+              <span>${formatNumber(remainingXp)} XP left</span>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    async function loadPlayer(player) {
+      activePlayer = player;
+      playerNameEl.textContent = player;
+      playerStatusEl.textContent = 'Loading stats…';
+      skillsGridEl.innerHTML = '<div class="loading">Loading skills…</div>';
+
+      try {
+        let skills = playerCache.get(player);
+        if (!skills) {
+          const url = `https://secure.runescape.com/m=hiscore/index_lite.ws?player=${encodeURIComponent(player)}`;
+          const csv = await fetchTextViaProxy(url);
+          skills = parseHiscoreCSV(csv);
+          playerCache.set(player, skills);
+        }
+
+        renderPlayerSummary(skills);
+        renderSkills(skills);
+        playerStatusEl.textContent = 'Live hiscores';
+      } catch (error) {
+        playerSummaryEl.innerHTML = `
+          <div class="summary-card"><span class="label">Status</span><span class="value">Could not load</span></div>
+          <div class="summary-card"><span class="label">Tip</span><span class="value">Check player name</span></div>
+          <div class="summary-card"><span class="label">Source</span><span class="value">HiScores</span></div>
+          <div class="summary-card"><span class="label">State</span><span class="value">Retry later</span></div>
+        `;
+        skillsGridEl.innerHTML = '<div class="error">Could not load hiscores right now. If you host this page yourself and the proxy is blocked, swap the fetch proxy or move the call to a tiny backend function.</div>';
+        playerStatusEl.textContent = 'Error';
+      }
+    }
+
+    function setActiveTab(player) {
+      document.querySelectorAll('.chip').forEach(button => {
+        button.classList.toggle('active', button.dataset.player === player);
+      });
+    }
+
+    async function searchItem() {
+      const name = document.getElementById('itemInput').value.trim();
+      const points = Number(document.getElementById('chartRange').value || 90);
+      if (!name) return;
+
+      itemStateEl.textContent = 'Searching…';
+      document.getElementById('itemSummary').innerHTML = `
+        <div class="metric"><span class="label">Item</span><span class="value">Loading…</span></div>
+        <div class="metric"><span class="label">Latest Price</span><span class="value">—</span></div>
+        <div class="metric"><span class="label">Volume</span><span class="value">—</span></div>
+        <div class="metric"><span class="label">Trend</span><span class="value">—</span></div>
+      `;
+
+      try {
+        const latestUrl = `https://api.weirdgloop.org/exchange/history/rs/latest?name=${encodeURIComponent(name.replace(/\s+/g, '_'))}`;
+        const historyUrl = `https://api.weirdgloop.org/exchange/history/rs/all?name=${encodeURIComponent(name.replace(/\s+/g, '_'))}`;
+
+        const [latestData, historyData] = await Promise.all([
+          fetch(latestUrl).then(r => r.json()),
+          fetch(historyUrl).then(r => r.json())
+        ]);
+
+        const itemKey = Object.keys(latestData || {})[0];
+        if (!itemKey) throw new Error('No item found');
+
+        const latest = latestData[itemKey];
+        const history = Array.isArray(historyData[itemKey]) ? historyData[itemKey] : [];
+        const sliced = history.slice(-points);
+        const prices = sliced.map(entry => Number(entry.price ?? entry.daily ?? 0));
+        const labels = sliced.map(entry => entry.timestamp ? new Date(entry.timestamp * 1000).toLocaleDateString([], { month: 'short', day: 'numeric' }) : '');
+        const start = prices[0] ?? 0;
+        const end = prices[prices.length - 1] ?? 0;
+        const delta = end - start;
+        const trendText = delta === 0 ? 'Flat' : `${delta > 0 ? '+' : ''}${abbreviate(delta)}`;
+
+        document.getElementById('itemSummary').innerHTML = `
+          <div class="metric"><span class="label">Item</span><span class="value">${latest.name || itemKey.replace(/_/g, ' ')}</span></div>
+          <div class="metric"><span class="label">Latest Price</span><span class="value">${formatNumber(Number(latest.price || end || 0))} gp</span></div>
+          <div class="metric"><span class="label">Volume</span><span class="value">${latest.volume ? formatNumber(Number(latest.volume)) : '—'}</span></div>
+          <div class="metric"><span class="label">Trend</span><span class="value">${trendText}</span></div>
+        `;
+
+        renderChart(labels, prices, latest.name || itemKey.replace(/_/g, ' '));
+        itemStateEl.textContent = 'Live data';
+      } catch (error) {
+        document.getElementById('itemSummary').innerHTML = `
+          <div class="metric"><span class="label">Item</span><span class="value">Not found</span></div>
+          <div class="metric"><span class="label">Latest Price</span><span class="value">—</span></div>
+          <div class="metric"><span class="label">Volume</span><span class="value">—</span></div>
+          <div class="metric"><span class="label">Trend</span><span class="value">—</span></div>
+        `;
+        itemStateEl.textContent = 'Error';
+        renderChart([], [], 'No data');
+      }
+    }
+
+    function renderChart(labels, values, title) {
+      const canvas = document.getElementById('priceChart');
+      const ctx = canvas.getContext('2d');
+      if (priceChart) priceChart.destroy();
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, 320);
+      gradient.addColorStop(0, 'rgba(241, 218, 146, 0.35)');
+      gradient.addColorStop(1, 'rgba(241, 218, 146, 0.02)');
+
+      priceChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            label: title,
+            data: values,
+            borderColor: '#f1da92',
+            backgroundColor: gradient,
+            fill: true,
+            tension: 0.26,
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            borderWidth: 2.2,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(15,15,15,0.94)',
+              titleColor: '#f8f3e8',
+              bodyColor: '#f8f3e8',
+              borderColor: 'rgba(255,230,160,0.18)',
+              borderWidth: 1,
+              displayColors: false,
+              callbacks: {
+                label: (context) => `${formatNumber(context.raw)} gp`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: 'rgba(248,243,232,0.56)', maxRotation: 0, autoSkip: true },
+              grid: { color: 'rgba(255,255,255,0.04)' }
+            },
+            y: {
+              ticks: {
+                color: 'rgba(248,243,232,0.56)',
+                callback: (value) => abbreviate(Number(value))
+              },
+              grid: { color: 'rgba(255,255,255,0.04)' }
+            }
+          }
+        }
+      });
+    }
+
+    function stripWikiMarkup(text) {
+      if (!text) return '—';
+      return text
+        .replace(/\{\{[^{}]*\}\}/g, ' ')
+        .replace(/\[\[(?:[^\]|]+\|)?([^\]]+)\]\]/g, '$1')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/'''?/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+    }
+
+    function extractField(wikitext, fieldNames) {
+      for (const field of fieldNames) {
+        const regex = new RegExp(`\\|\\s*${field}\\s*=([\\s\\S]*?)(?=\\n\\||$)`, 'i');
+        const match = wikitext.match(regex);
+        if (match?.[1]?.trim()) return stripWikiMarkup(match[1]);
+      }
+      return '—';
+    }
+
+    function listify(text) {
+      if (!text || text === '—') return [];
+      return text
+        .split(/\n|,|;/)
+        .map(entry => entry.replace(/^\*+\s*/, '').trim())
+        .filter(Boolean)
+        .slice(0, 12);
+    }
+
+    async function searchQuests() {
+      const query = document.getElementById('questInput').value.trim();
+      if (!query) return;
+
+      questResultsEl.classList.remove('hidden');
+      questResultsEl.innerHTML = '<div class="loading">Searching quests…</div>';
+      questDetailEl.innerHTML = '<div class="empty">Pick a result when it appears.</div>';
+
+      try {
+        const url = `https://runescape.wiki/api.php?action=query&list=search&format=json&origin=*&srsearch=${encodeURIComponent(query + ' intitle:quest')}&srlimit=8`;
+        const data = await fetchJsonViaProxy(url);
+        const results = data?.query?.search || [];
+
+        if (!results.length) {
+          questResultsEl.classList.remove('hidden');
+          questResultsEl.innerHTML = '<div class="empty">No quest results found.</div>';
+          return;
+        }
+
+        questResultsEl.innerHTML = results.map((result) => `
+          <article class="quest-card" data-title="${encodeURIComponent(result.title)}" tabindex="0" role="button">
+            <h4>${result.title}</h4>
+            <p>${stripWikiMarkup(result.snippet || 'Quest result')}</p>
+          </article>
+        `).join('');
+      } catch (error) {
+        questResultsEl.classList.remove('hidden');
+        questResultsEl.innerHTML = '<div class="error">Could not search quests right now.</div>';
+      }
+    }
+
+    async function loadQuestDetail(title) {
+      questResultsEl.classList.add('hidden');
+      questDetailEl.innerHTML = `
+        <div class="loading-spinner">
+          <div class="spinner-ring"></div>
+          <div>Loading quest info…</div>
+        </div>
+      `;
+
+      try {
+        const url = `https://runescape.wiki/api.php?action=parse&page=${encodeURIComponent(title)}&prop=wikitext&format=json&origin=*`;
+        const data = await fetchJsonViaProxy(url);
+        const wikitext = data?.parse?.wikitext?.['*'] || '';
+
+        const start = extractField(wikitext, ['start', 'startpoint', 'start_point']);
+        const requirements = extractField(wikitext, ['requirements', 'requirement']);
+        const items = extractField(wikitext, ['items required', 'items_required', 'itemsreq', 'items']);
+        const length = extractField(wikitext, ['length']);
+        const difficulty = extractField(wikitext, ['difficulty']);
+        const members = extractField(wikitext, ['members']);
+
+        const requirementList = listify(requirements);
+        const itemList = listify(items);
+
+        questDetailEl.innerHTML = `
+          <h3>${title}</h3>
+          <div class="quest-meta">
+            <span class="quest-pill">${members !== '—' ? members : 'Quest'}</span>
+            <span class="quest-pill">${difficulty !== '—' ? difficulty : 'Difficulty n/a'}</span>
+            <span class="quest-pill">${length !== '—' ? length : 'Length n/a'}</span>
+          </div>
+
+          <div class="quest-section">
+            <h5>Where to start</h5>
+            <p>${start}</p>
+          </div>
+
+          <div class="quest-section">
+            <h5>Requirements</h5>
+            ${requirementList.length ? `<ul>${requirementList.map(item => `<li>${item}</li>`).join('')}</ul>` : `<p>${requirements}</p>`}
+          </div>
+
+          <div class="quest-section">
+            <h5>Needed items</h5>
+            ${itemList.length ? `<ul>${itemList.map(item => `<li>${item}</li>`).join('')}</ul>` : `<p>${items}</p>`}
+          </div>
+        `;
+      } catch (error) {
+        questDetailEl.innerHTML = '<div class="error">Could not load quest details for that page.</div>';
+      }
+    }
+
+    function initTabs() {
+      document.querySelectorAll('.chip[data-player]').forEach(button => {
+        button.addEventListener('click', () => {
+          setActiveTab(button.dataset.player);
+          loadPlayer(button.dataset.player);
+        });
+      });
+    }
+
+    function initEvents() {
+      document.getElementById('itemSearchBtn').addEventListener('click', searchItem);
+      document.getElementById('itemInput').addEventListener('keydown', event => {
+        if (event.key === 'Enter') searchItem();
+      });
+      document.getElementById('chartRange').addEventListener('change', () => {
+        if (document.getElementById('itemInput').value.trim()) searchItem();
+      });
+      document.getElementById('questSearchBtn').addEventListener('click', searchQuests);
+      document.getElementById('questInput').addEventListener('keydown', event => {
+        if (event.key === 'Enter') searchQuests();
+      });
+
+      questResultsEl.addEventListener('click', event => {
+        const card = event.target.closest('.quest-card');
+        if (!card) return;
+
+        questResultsEl.querySelectorAll('.quest-card').forEach(other => other.classList.remove('active'));
+        card.classList.add('active');
+        const title = decodeURIComponent(card.dataset.title || '');
+        if (title) loadQuestDetail(title);
+      });
+
+      questResultsEl.addEventListener('keydown', event => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        const card = event.target.closest('.quest-card');
+        if (!card) return;
+        event.preventDefault();
+        card.click();
+      });
+    }
+
+    function initParticles() {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        particles = Array.from({ length: Math.max(38, Math.floor(window.innerWidth / 36)) }, () => ({
+          x: Math.random() * window.innerWidth,
+          y: Math.random() * window.innerHeight,
+          r: Math.random() * 2.2 + 0.7,
+          vx: (Math.random() - 0.5) * 0.24,
+          vy: (Math.random() - 0.5) * 0.24,
+          alpha: Math.random() * 0.45 + 0.08,
+          pulse: Math.random() * Math.PI * 2,
+        }));
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx + (mouse.x - window.innerWidth / 2) * 0.000008;
+          p.y += p.vy + (mouse.y - window.innerHeight / 2) * 0.000008;
+          p.pulse += 0.015;
+
+          if (p.x < -20) p.x = window.innerWidth + 20;
+          if (p.x > window.innerWidth + 20) p.x = -20;
+          if (p.y < -20) p.y = window.innerHeight + 20;
+          if (p.y > window.innerHeight + 20) p.y = -20;
+
+          ctx.beginPath();
+          ctx.fillStyle = `rgba(212,175,55,${p.alpha + Math.sin(p.pulse) * 0.04})`;
+          ctx.shadowBlur = 16;
+          ctx.shadowColor = 'rgba(212,175,55,0.22)';
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          for (let j = i + 1; j < particles.length; j++) {
+            const q = particles[j];
+            const dist = Math.hypot(p.x - q.x, p.y - q.y);
+            if (dist < 105) {
+              ctx.beginPath();
+              ctx.strokeStyle = `rgba(212,175,55,${0.075 * (1 - dist / 105)})`;
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(q.x, q.y);
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('mousemove', e => {
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+      });
+      window.addEventListener('resize', resize);
+      resize();
+      draw();
+    }
+
+    initTabs();
+    initEvents();
+    initParticles();
+    setActiveTab(activePlayer);
+    loadPlayer(activePlayer);
+    document.getElementById('itemInput').value = 'Bond';
+    searchItem();
+  </script>
+</body>
+</html>
