@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Vault</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #060606;
+      --bg-2: #0d0d0d;
+      --panel: rgba(18, 18, 18, 0.72);
+      --panel-strong: rgba(14, 14, 14, 0.88);
+      --gold: #d4af37;
+      --gold-soft: #f0d98a;
+      --gold-dim: rgba(212, 175, 55, 0.32);
+      --line: rgba(255, 230, 160, 0.16);
+      --text: #f8f4ea;
+      --muted: rgba(248, 244, 234, 0.68);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+      --glow: 0 0 30px rgba(212, 175, 55, 0.2), 0 0 80px rgba(212, 175, 55, 0.08);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --content-width: min(1320px, calc(100vw - 64px));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(212,175,55,0.22), transparent 30%),
+        radial-gradient(circle at 15% 20%, rgba(212,175,55,0.08), transparent 22%),
+        radial-gradient(circle at 85% 20%, rgba(212,175,55,0.06), transparent 25%),
+        linear-gradient(180deg, #090909 0%, #050505 100%);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
+      pointer-events: none;
+      opacity: 0.45;
+    }
+
+    #particles,
+    #dust {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    #particles { opacity: 0.8; }
+    #dust { opacity: 0.3; }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      mix-blend-mode: screen;
+      opacity: 0.25;
+      animation: drift 20s ease-in-out infinite alternate;
+    }
+
+    .orb.left {
+      width: 260px;
+      height: 260px;
+      left: -60px;
+      top: 18%;
+      background: radial-gradient(circle, rgba(212,175,55,0.65), rgba(212,175,55,0));
+      animation-duration: 23s;
+    }
+
+    .orb.right {
+      width: 300px;
+      height: 300px;
+      right: -80px;
+      bottom: 10%;
+      background: radial-gradient(circle, rgba(212,175,55,0.35), rgba(212,175,55,0));
+      animation-duration: 27s;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0) scale(1); }
+      to { transform: translate3d(30px, -30px, 0) scale(1.08); }
+    }
+
+    .frame {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 26px 32px 32px;
+    }
+
+    .layout {
+      width: var(--content-width);
+      height: min(900px, calc(100dvh - 58px));
+      display: grid;
+      grid-template-rows: auto auto auto 1fr;
+      align-items: start;
+      gap: 28px;
+      position: relative;
+    }
+
+    .top-decoration {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 170px;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .top-decoration::before,
+    .top-decoration::after {
+      content: "";
+      position: absolute;
+      top: 58px;
+      width: 24%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.65), transparent);
+      box-shadow: 0 0 24px rgba(212,175,55,0.25);
+    }
+
+    .top-decoration::before { left: 2%; }
+    .top-decoration::after { right: 2%; }
+
+    .brand-wrap {
+      display: flex;
+      justify-content: center;
+      padding-top: 12px;
+    }
+
+    .brand {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      text-align: center;
+      padding: 6px 18px 0;
+    }
+
+    .eyebrow {
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      color: rgba(240, 217, 138, 0.82);
+    }
+
+    .title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.4rem, 6vw, 5.8rem);
+      line-height: 0.95;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-shadow: 0 0 24px rgba(212, 175, 55, 0.08);
+    }
+
+    .title .gold {
+      color: var(--gold-soft);
+      text-shadow: 0 0 16px rgba(212,175,55,0.2), 0 0 48px rgba(212,175,55,0.12);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .vault-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(20,20,20,0.8), rgba(10,10,10,0.86));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,0.03), var(--glow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .vault-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(255,235,180,0.34), rgba(212,175,55,0.05), rgba(255,235,180,0.12));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .search-shell {
+      width: min(980px, 100%);
+      margin: 0 auto;
+      padding: 16px;
+      border-radius: var(--radius-xl);
+    }
+
+    .search-shell::after {
+      content: "";
+      position: absolute;
+      inset: auto 18px 8px 18px;
+      height: 45%;
+      background: radial-gradient(circle at center, rgba(212,175,55,0.12), transparent 70%);
+      filter: blur(28px);
+      pointer-events: none;
+    }
+
+    .search-form {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding: 18px 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 230, 160, 0.13);
+      background: linear-gradient(180deg, rgba(26,26,26,0.9), rgba(10,10,10,0.82));
+      overflow: hidden;
+      transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .search-form:hover,
+    .search-form:focus-within {
+      transform: translateY(-2px) scale(1.003);
+      border-color: rgba(240,217,138,0.28);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.35), 0 0 28px rgba(212,175,55,0.14);
+    }
+
+    .search-form::before {
+      content: "";
+      position: absolute;
+      inset: -50% auto -50% -20%;
+      width: 40%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+      transform: rotate(18deg);
+      animation: shimmer 11s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      from { transform: translateX(-220%) rotate(18deg); }
+      to { transform: translateX(620%) rotate(18deg); }
+    }
+
+    .search-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 30% 30%, rgba(255,230,160,0.2), rgba(212,175,55,0.06));
+      border: 1px solid rgba(255,230,160,0.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04), 0 0 20px rgba(212,175,55,0.08);
+      flex-shrink: 0;
+    }
+
+    .search-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--gold-soft);
+      opacity: 0.95;
+    }
+
+    .search-input-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .search-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: rgba(240,217,138,0.72);
+    }
+
+    .search-input {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .search-input::placeholder {
+      color: rgba(255,255,255,0.34);
+    }
+
+    .search-button {
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+      height: 56px;
+      padding: 0 24px;
+      border-radius: 18px;
+      color: #0d0b06;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #f3dc94, #c89b22);
+      box-shadow: 0 10px 24px rgba(212,175,55,0.24), inset 0 1px 0 rgba(255,255,255,0.45);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .search-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 34px rgba(212,175,55,0.32), inset 0 1px 0 rgba(255,255,255,0.45);
+      filter: brightness(1.05);
+    }
+
+    .link-row {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .quick-link {
+      position: relative;
+      min-height: 92px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+
+    .quick-link:hover {
+      transform: translateY(-6px);
+      border-color: rgba(240,217,138,0.22);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.36), 0 0 28px rgba(212,175,55,0.13);
+      background: linear-gradient(180deg, rgba(24,24,24,0.92), rgba(11,11,11,0.88));
+    }
+
+    .quick-link::after {
+      content: "";
+      position: absolute;
+      inset: auto -10% -30% auto;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.18), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .quick-link:hover::after { opacity: 1; }
+
+    .quick-link .icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, rgba(255,235,180,0.08), rgba(212,175,55,0.04));
+      border: 1px solid rgba(255,230,160,0.1);
+      flex-shrink: 0;
+    }
+
+    .quick-link .icon svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--gold-soft);
+    }
+
+    .quick-link .meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .quick-link .eyeline {
+      color: rgba(240,217,138,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.68rem;
+    }
+
+    .quick-link .name {
+      font-size: 1.04rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .quick-link .desc {
+      color: var(--muted);
+      font-size: 0.88rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .bottom-zone {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      align-items: center;
+      justify-items: center;
+      min-height: 0;
+      padding-top: 2px;
+    }
+
+    .weather-card {
+      grid-column: 1;
+      width: min(1120px, 100%);
+      height: 160px;
+      border-radius: 26px;
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 12px;
+    }
+
+    .weather-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .weather-label {
+
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .weather-label .small {
+      color: rgba(240,217,138,0.76);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+    }
+
+    .weather-label h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.6rem;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .weather-badge {
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,230,160,0.12);
+      color: rgba(240,217,138,0.9);
+      background: rgba(255,230,160,0.04);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .weather-main {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 18px;
+      height: 100%;
+    }
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 22px;
+      text-align: left;
+      position: relative;
+      min-height: 100%;
+    }
+
+    .weather-glow {
+
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,175,55,0.22), transparent 70%);
+      filter: blur(10px);
+      animation: pulse 4.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.92); opacity: 0.65; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .weather-icon {
+      font-size: 3.2rem;
+      width: 90px;
+      height: 90px;
+      border-radius: 24px;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 30% 30%, rgba(255,230,160,0.18), rgba(212,175,55,0.04));
+      border: 1px solid rgba(255,230,160,0.14);
+      text-shadow: 0 0 16px rgba(212,175,55,0.28);
+    }
+
+    .weather-temp {
+      font-size: 3.2rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .weather-desc {
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 1.05rem;
+    }
+
+    .weather-location {
+      margin-top: 6px;
+      color: rgba(240,217,138,0.85);
+      font-size: 0.95rem;
+    }
+
+    .weather-stats {
+      position: absolute;
+      bottom: 14px;
+      left: 18px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .stat {
+      border-radius: 14px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      min-width: 90px;
+    }
+
+    .stat .k {
+      display: block;
+      color: rgba(240,217,138,0.65);
+      text-transform: uppercase;
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      margin-bottom: 8px;
+    }
+
+    .stat .v {
+      font-weight: 600;
+      font-size: 0.98rem;
+    }
+
+    .signature {
+      position: absolute;
+      right: 24px;
+      bottom: 18px;
+      color: rgba(255,255,255,0.2);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    @media (max-width: 1220px) {
+      .layout {
+        gap: 22px;
+      }
+
+      .link-row {
+        gap: 14px;
+      }
+
+      .quick-link {
+        min-height: 86px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        width: min(96vw, 1100px);
+        height: min(900px, calc(100dvh - 26px));
+        grid-template-rows: auto auto auto 1fr;
+      }
+
+      .link-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .weather-card {
+        width: min(100%, 980px);
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .weather-main {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 720px) {
+      html, body {
+        overflow: auto;
+      }
+
+      .frame {
+        min-height: 100dvh;
+        height: auto;
+        padding: 18px;
+      }
+
+      .layout {
+        height: auto;
+        min-height: calc(100dvh - 36px);
+        gap: 18px;
+      }
+
+      .search-form {
+        grid-template-columns: 1fr;
+        padding: 18px;
+      }
+
+      .search-icon,
+      .search-button {
+        width: 100%;
+      }
+
+      .link-row {
+        grid-template-columns: 1fr;
+      }
+
+      .weather-card {
+        width: 100%;
+        min-height: 220px;
+        padding: 20px;
+      }
+
+      .weather-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .weather-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .title {
+        font-size: clamp(2.7rem, 12vw, 4.2rem);
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+  <canvas id="dust"></canvas>
+  <div class="orb left"></div>
+  <div class="orb right"></div>
+
+  <main class="frame">
+    <section class="layout">
+      <div class="top-decoration"></div>
+
+      <div class="brand-wrap">
+        <div class="brand">
+          <div class="eyebrow">ENTER THE INTERNET</div>
+          <h1 class="title">THE <span class="gold">VAULT</span></h1>
+        </div>
+      </div>
+
+      <div class="search-shell vault-card">
+        <form class="search-form" action="https://duckduckgo.com/" method="get" target="_blank">
+          <div class="search-icon" aria-hidden="true">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m1.85-5.15a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+
+          <div class="search-input-wrap">
+            <span class="search-label">DuckDuckGo Search</span>
+            <input class="search-input" type="text" name="q" placeholder="Search the web from The Vault..." autocomplete="off" />
+          </div>
+
+          <button class="search-button" type="submit">Search</button>
+        </form>
+      </div>
+
+      <nav class="link-row" aria-label="Quick links">
+        <a class="quick-link vault-card" href="https://youtube.com" target="_blank" rel="noreferrer">
+          <div class="icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5l-4 2.5v-5l4 2.5z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12c0 3.2-.3 5.1-.8 6.2a2.5 2.5 0 01-1.4 1.3C17.6 20 15.5 20 12 20s-5.6 0-6.8-.5a2.5 2.5 0 01-1.4-1.3C3.3 17.1 3 15.2 3 12s.3-5.1.8-6.2a2.5 2.5 0 011.4-1.3C6.4 4 8.5 4 12 4s5.6 0 6.8.5a2.5 2.5 0 011.4 1.3c.5 1.1.8 3 .8 6.2z" />
+            </svg>
+          </div>
+          <div class="meta">
+            <span class="eyeline">Media</span>
+            <span class="name">YouTube</span>
+            <span class="desc">Video, music, streams</span>
+          </div>
+        </a>
+
+        <a class="quick-link vault-card" href="https://fmhy.net" target="_blank" rel="noreferrer">
+          <div class="icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h10M4 18h13" />
+            </svg>
+          </div>
+          <div class="meta">
+            <span class="eyeline">Library</span>
+            <span class="name">FMHY</span>
+            <span class="desc">Useful web resources</span>
+          </div>
+        </a>
+
+        <a class="quick-link vault-card" href="https://chatgpt.com" target="_blank" rel="noreferrer">
+          <div class="icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75a3.75 3.75 0 013.75 3.75v.14a3.75 3.75 0 012.75 6.39 3.75 3.75 0 01-3.39 5.72H9a3.75 3.75 0 01-3.39-5.72A3.75 3.75 0 018.36 7.64V7.5A3.75 3.75 0 0112 3.75z" />
+            </svg>
+          </div>
+          <div class="meta">
+            <span class="eyeline">AI</span>
+            <span class="name">ChatGPT</span>
+            <span class="desc">Research and creation</span>
+          </div>
+        </a>
+
+        <a class="quick-link vault-card" href="https://monochrome.supply/" target="_blank" rel="noreferrer">
+          <div class="icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2zm2 4h8m-8 4h8m-8 4h5" />
+            </svg>
+          </div>
+          <div class="meta">
+            <span class="eyeline">Design</span>
+            <span class="name">Monochrome</span>
+            <span class="desc">Minimal visual inspiration</span>
+          </div>
+        </a>
+      </nav>
+
+      <div class="bottom-zone">
+        <section class="weather-card vault-card" aria-label="Weather card">
+          <div>
+            <div class="weather-top">
+              <div class="weather-label">
+                <span class="small">Local Atmosphere</span>
+                <h2>Weather</h2>
+              </div>
+              <div class="weather-badge" id="weatherTime">Live</div>
+            </div>
+
+            <div class="weather-stats">
+              <div class="stat">
+                <span class="k">Humidity</span>
+                <span class="v" id="weatherHumidity">48%</span>
+              </div>
+              <div class="stat">
+                <span class="k">Wind</span>
+                <span class="v" id="weatherWind">6 mph</span>
+              </div>
+              <div class="stat">
+                <span class="k">Feels</span>
+                <span class="v" id="weatherFeels">71°</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="weather-main">
+            <div class="weather-icon" id="weatherIcon">✦</div>
+            <div>
+              <div class="weather-temp" id="weatherTemp">72°</div>
+              <div class="weather-desc" id="weatherDesc">Clear</div>
+              <div class="weather-location" id="weatherLocation">Montoursville, PA</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <div class="signature">The Vault</div>
+
+  <script>
+    const particleCanvas = document.getElementById('particles');
+    const particleCtx = particleCanvas.getContext('2d');
+    const dustCanvas = document.getElementById('dust');
+    const dustCtx = dustCanvas.getContext('2d');
+
+    let particles = [];
+    let dust = [];
+    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+    function resizeCanvases() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      [particleCanvas, dustCanvas].forEach(canvas => {
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+      });
+
+      particleCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dustCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      createParticles();
+      createDust();
+    }
+
+    function createParticles() {
+      particles = Array.from({ length: Math.max(34, Math.floor(window.innerWidth / 42)) }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 2.2 + 0.7,
+        vx: (Math.random() - 0.5) * 0.24,
+        vy: (Math.random() - 0.5) * 0.24,
+        alpha: Math.random() * 0.55 + 0.1,
+        pulse: Math.random() * Math.PI * 2,
+      }));
+    }
+
+    function createDust() {
+      dust = Array.from({ length: Math.max(80, Math.floor(window.innerWidth / 14)) }, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: Math.random() * 1.2 + 0.2,
+        speed: Math.random() * 0.18 + 0.03,
+        drift: (Math.random() - 0.5) * 0.12,
+        alpha: Math.random() * 0.18 + 0.03,
+      }));
+    }
+
+    function drawParticles() {
+      particleCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      particleCtx.lineWidth = 1;
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        p.x += p.vx + (mouse.x - window.innerWidth / 2) * 0.00001;
+        p.y += p.vy + (mouse.y - window.innerHeight / 2) * 0.00001;
+        p.pulse += 0.015;
+
+        if (p.x < -20) p.x = window.innerWidth + 20;
+        if (p.x > window.innerWidth + 20) p.x = -20;
+        if (p.y < -20) p.y = window.innerHeight + 20;
+        if (p.y > window.innerHeight + 20) p.y = -20;
+
+        const glow = 0.4 + Math.sin(p.pulse) * 0.2;
+        particleCtx.beginPath();
+        particleCtx.fillStyle = `rgba(212, 175, 55, ${p.alpha + glow * 0.08})`;
+        particleCtx.shadowBlur = 16;
+        particleCtx.shadowColor = 'rgba(212,175,55,0.25)';
+        particleCtx.arc(p.x, p.y, p.r + glow * 0.4, 0, Math.PI * 2);
+        particleCtx.fill();
+        particleCtx.shadowBlur = 0;
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const dx = p.x - q.x;
+          const dy = p.y - q.y;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist < 110) {
+            particleCtx.beginPath();
+            particleCtx.strokeStyle = `rgba(212, 175, 55, ${0.08 * (1 - dist / 110)})`;
+            particleCtx.moveTo(p.x, p.y);
+            particleCtx.lineTo(q.x, q.y);
+            particleCtx.stroke();
+          }
+        }
+      }
+    }
+
+    function drawDust() {
+      dustCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      dust.forEach(d => {
+        d.y -= d.speed;
+        d.x += d.drift;
+
+        if (d.y < -5) {
+          d.y = window.innerHeight + 5;
+          d.x = Math.random() * window.innerWidth;
+        }
+        if (d.x < -5) d.x = window.innerWidth + 5;
+        if (d.x > window.innerWidth + 5) d.x = -5;
+
+        dustCtx.beginPath();
+        dustCtx.fillStyle = `rgba(255, 235, 180, ${d.alpha})`;
+        dustCtx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        dustCtx.fill();
+      });
+    }
+
+    function animate() {
+      drawParticles();
+      drawDust();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener('resize', resizeCanvases);
+    resizeCanvases();
+    animate();
+
+    function updateTimeBadge() {
+      const badge = document.getElementById('weatherTime');
+      const now = new Date();
+      badge.textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    }
+
+    updateTimeBadge();
+    setInterval(updateTimeBadge, 15000);
+
+    async function loadWeather() {
+      const weatherLocation = document.getElementById('weatherLocation');
+      const weatherTemp = document.getElementById('weatherTemp');
+      const weatherDesc = document.getElementById('weatherDesc');
+      const weatherHumidity = document.getElementById('weatherHumidity');
+      const weatherWind = document.getElementById('weatherWind');
+      const weatherFeels = document.getElementById('weatherFeels');
+      const weatherIcon = document.getElementById('weatherIcon');
+
+      const latitude = 41.2492;
+      const longitude = -76.9200;
+      const fallback = {
+        temperature: 72,
+        apparent_temperature: 71,
+        relative_humidity_2m: 48,
+        wind_speed_10m: 6,
+        weather_code: 0,
+      };
+
+      const codeMap = {
+        0: ['✦', 'Clear sky'],
+        1: ['☼', 'Mostly clear'],
+        2: ['⛅', 'Partly cloudy'],
+        3: ['☁', 'Overcast'],
+        45: ['〰', 'Fog'],
+        48: ['〰', 'Rime fog'],
+        51: ['☂', 'Light drizzle'],
+        53: ['☂', 'Drizzle'],
+        55: ['☂', 'Heavy drizzle'],
+        61: ['☔', 'Light rain'],
+        63: ['☔', 'Rain'],
+        65: ['☔', 'Heavy rain'],
+        71: ['❄', 'Snow fall'],
+        80: ['☔', 'Rain showers'],
+        95: ['⚡', 'Thunderstorm'],
+      };
+
+      try {
+        const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,weather_code&temperature_unit=fahrenheit&wind_speed_unit=mph`;
+        const response = await fetch(url);
+        const data = await response.json();
+        const current = data.current || fallback;
+        const [icon, desc] = codeMap[current.weather_code] || ['✦', 'Current conditions'];
+
+        weatherLocation.textContent = 'Montoursville, PA';
+        weatherTemp.textContent = `${Math.round(current.temperature_2m ?? current.temperature)}°`;
+        weatherDesc.textContent = desc;
+        weatherHumidity.textContent = `${Math.round(current.relative_humidity_2m ?? current.relative_humidity)}%`;
+        weatherWind.textContent = `${Math.round(current.wind_speed_10m ?? current.wind_speed)} mph`;
+        weatherFeels.textContent = `${Math.round(current.apparent_temperature ?? current.feels_like ?? current.temperature)}°`;
+        weatherIcon.textContent = icon;
+      } catch (error) {
+        const [icon, desc] = codeMap[fallback.weather_code];
+        weatherLocation.textContent = 'Montoursville, PA';
+        weatherTemp.textContent = `${fallback.temperature}°`;
+        weatherDesc.textContent = desc;
+        weatherHumidity.textContent = `${fallback.relative_humidity_2m}%`;
+        weatherWind.textContent = `${fallback.wind_speed_10m} mph`;
+        weatherFeels.textContent = `${fallback.apparent_temperature}°`;
+        weatherIcon.textContent = icon;
+      }
+    }
+
+    loadWeather();
+  </script>
+</body>
+</html>
